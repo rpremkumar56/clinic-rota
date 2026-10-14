@@ -67,11 +67,11 @@ h2{font-family:var(--serif);font-weight:400;font-size:26px;line-height:1.1;margi
 .date{text-align:center;line-height:1.05}
 .date b{font-family:var(--serif);font-weight:400;font-size:26px;display:block}
 .date span{font-size:11px;color:var(--mute);font-weight:500}
-.cell{border:0;border-radius:12px;height:48px;font-size:13px;font-weight:700;position:relative;width:100%;padding:0 2px}
+.cell{border:0;border-radius:12px;height:58px;font-size:13px;font-weight:700;position:relative;width:100%;padding:0 2px}
 .cell small{display:block;font-size:10px;font-weight:500;opacity:.85;margin-top:1px}
-.cell .ini{position:absolute;top:4px;left:7px;font-size:9px;font-weight:700;opacity:.6}
+.cell .ini{display:block;font-size:9px;font-weight:700;opacity:.6;letter-spacing:.04em;margin-bottom:1px}
 .cell.locked::after{content:"";position:absolute;top:6px;right:7px;width:7px;height:7px;border-radius:50%;background:currentColor}
-.busy{border:1px solid var(--line);background:#fff;border-radius:12px;height:48px;font-size:18px;filter:grayscale(1);opacity:.4;padding:0}
+.busy{border:1px solid var(--line);background:#fff;border-radius:12px;height:58px;font-size:18px;filter:grayscale(1);opacity:.4;padding:0}
 .busy.on{filter:none;opacity:1;background:#FFF1CF;border-color:#FFC857}
 .consline{display:flex;flex-wrap:wrap;gap:5px;margin:7px 2px 1px 50px}
 .cons{border:0;background:var(--cream);border-radius:999px;padding:5px 10px;font-size:12px;font-weight:600;color:var(--ink)}
@@ -98,7 +98,7 @@ input[type=text],input[type=number],input[type=month],input[type=time],select{wi
 .btn.primary{background:var(--ink);color:#fff;border-color:var(--ink)}
 .btn.danger{color:var(--warn);border-color:#F6CFC9}
 .small{font-size:13px;color:var(--mute);line-height:1.55}
-.badge{width:34px;height:34px;border-radius:50%;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex:none}
+.badge{width:36px;height:36px;border-radius:50%;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;letter-spacing:-.02em;flex:none}
 /* Today */
 .daynav{display:flex;align-items:flex-end;gap:8px;margin:6px 0 16px}
 .daynav div{flex:1}
@@ -119,13 +119,13 @@ input[type=text],input[type=number],input[type=month],input[type=time],select{wi
 .strip{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:14px 14px 10px;margin:0 0 6px}
 .grp{font-size:12px;font-weight:600;color:var(--mute);margin:10px 0 2px}
 .grp:first-child{margin-top:0}
-.srow{display:grid;grid-template-columns:30px 1fr;gap:8px;align-items:center;margin:6px 0}
+.srow{display:grid;grid-template-columns:36px 1fr;gap:8px;align-items:center;margin:6px 0}
 .srow .sl{font-size:11px;font-weight:700}
 .track{position:relative;height:18px;background:#F6F0EA;border-radius:999px;overflow:hidden}
 .bar{position:absolute;top:2px;bottom:2px;border-radius:999px}
 .line6{position:absolute;top:0;bottom:0;border-left:2px dashed #F0A79D}
 .now{position:absolute;top:-2px;bottom:-2px;border-left:2px solid var(--flame)}
-.ticks{position:relative;height:18px;margin-left:38px;margin-top:4px}
+.ticks{position:relative;height:18px;margin-left:44px;margin-top:4px}
 .tick{position:absolute;font-size:11px;color:var(--mute);transform:translateX(-50%);white-space:nowrap}
 .tick:first-child{transform:none}
 .tick:last-child{transform:translateX(-100%)}
@@ -264,8 +264,8 @@ const namesOf=team=>team==='doc'?db.doctors.names:db.settings.names;
 const nameOf=(team,i)=>namesOf(team)[i]||`${team==='doc'?'Doctor':'Assistant'} ${i+1}`;
 const defaultNames=team=>namesOf(team).every((n,i)=>n===`${team==='doc'?'Doctor':'Assistant'} ${i+1}`);
 function initials(team,i){
-  const n=nameOf(team,i).replace(/^dr\.?\s+/i,'').trim(), p=n.split(/\s+/);
-  return (p.length>1?p[0][0]+p[1][0]:n.slice(0,2)).toUpperCase();
+  const n=nameOf(team,i).replace(/^dr\.?\s*/i,'').trim();
+  return n.replace(/[^A-Za-z0-9]/g,'').slice(0,3).toUpperCase();
 }
 const shLabel=(team,c)=>team==='doc'&&c==='O'?'Leave':SH[c].label;
 const shShort=(team,c)=>team==='doc'&&c==='O'?'Leave':SH[c].short;
@@ -536,7 +536,7 @@ function stepsHtml(active){
   const s=[['plan','1. Off days'],['rota','2. Check rota'],['share','3. Share']];
   return `<div class="steps">${s.map(([k,l])=>`<button class="step ${active===k?'on':''}" onclick="${k==='share'?'shareImage()':`setTab('${k}')`}">${l}</button>`).join('')}</div>`;
 }
-const badge=(team,i,size)=>`<span class="badge" style="background:${COL[team][i]}${size?`;width:${size}px;height:${size}px;font-size:${Math.round(size/3)}px`:''}">${esc(initials(team,i))}</span>`;
+const badge=(team,i,size)=>`<span class="badge" style="background:${COL[team][i]}${size?`;width:${size}px;height:${size}px;font-size:${Math.round(size/3.3)}px`:''}">${esc(initials(team,i))}</span>`;
 
 /* ---------- Today ---------- */
 function renderToday(){
