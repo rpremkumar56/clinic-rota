@@ -36,6 +36,11 @@ h2{font-size:16px;margin:0 0 8px}
 .switch.hdr{background:rgba(255,255,255,.14);margin:10px 0 0}
 .switch.hdr button{color:rgba(255,255,255,.85);padding:8px 4px;font-size:13px}
 .switch.hdr button.on{background:#fff;color:var(--brand)}
+.switch.hdr button.dis{color:rgba(255,255,255,.35);cursor:not-allowed}
+.hrow{display:contents}
+.both .ghead{grid-template-rows:auto auto;row-gap:4px}
+.both .day{scroll-margin-top:calc(var(--hh) + 112px)}
+.both .row.second{margin-top:6px;padding-top:6px;border-top:1px dashed var(--line)}
 .steps{display:flex;gap:6px;margin-bottom:10px}
 .step{flex:1;text-align:center;font-size:13px;font-weight:700;padding:8px 4px;border-radius:9px;background:#dbe6e2;color:var(--mute);border:0}
 .step.on{background:var(--brand-2);color:#fff}
@@ -47,6 +52,7 @@ h2{font-size:16px;margin:0 0 8px}
 .info{background:#e3f1ec;border:1px solid #b7dacd;color:#0b4f4a;border-radius:12px;padding:10px 12px;font-size:14px;margin-bottom:10px}
 .ghead,.row{display:grid;grid-template-columns:44px repeat(3,minmax(0,1fr)) 42px;gap:6px;align-items:center}
 .doc .ghead,.doc .row{grid-template-columns:44px repeat(3,minmax(0,1fr))}
+.ghead div.plain{min-height:1px}
 .ghead{position:sticky;top:var(--hh);z-index:4;background:var(--paper);padding:8px 7px 6px;margin:0 -2px}
 .ghead div{font-size:12px;font-weight:700;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;border-radius:8px;padding:5px 2px;color:#fff}
 .ghead div.plain{color:var(--mute);background:none}
@@ -207,8 +213,8 @@ const SH={
 const COL={asst:['#0f766e','#db2777','#4f46e5'], doc:['#a16207','#1e5a8a','#be123c']};
 const CONS_COL='#475569';
 const TEAM={asst:{label:'Assistants',one:'assistant'}, doc:{label:'Doctors',one:'doctor'}};
-const DEF_DOC={names:['Doctor 1','Doctor 2','Doctor 3'],defaults:['DS','DE','DM'],leaves:4,cl:2};
-const DEF_CONS=[{name:'Consultant 1',days:[2,4],start:900,end:1080},{name:'Consultant 2',days:[1,3,5],start:960,end:1140}];
+const DEF_DOC={names:['Dr. Geo','Dr. Shreya','Dr. Sri Niranchana'],defaults:['DS','DE','DM'],leaves:4,cl:2};
+const DEF_CONS=[{name:'Dr. Niraksha',days:[2,4],start:900,end:1080},{name:'Dr. Shwetha Prasad',days:[1,3,5],start:960,end:1140}];
 
 const pad=n=>String(n).padStart(2,'0');
 const ymKey=(y,m)=>`${y}-${pad(m)}`;
@@ -224,7 +230,7 @@ const now=new Date();
 
 /* ---------- Storage ---------- */
 function defaultDb(){
-  return {settings:{clinic:'Dental Clinic',names:['Assistant 1','Assistant 2','Assistant 3'],offs:5,
+  return {settings:{clinic:'Apollo',names:['Debo','Jagadish','New person'],offs:5,
           startMonth:ymKey(now.getFullYear(),now.getMonth()+1),lastBackup:null,todayView:'all'},months:{}};
 }
 function load(){
@@ -470,12 +476,22 @@ function beforeEdit(team,date){
 }
 
 /* ---------- UI state ---------- */
-let view={y:now.getFullYear(),m:now.getMonth()+1,tab:'today',team:'asst',dayOffset:0,who:0,planMode:'O',scrollToday:false};
-let cur=null;
+let view={y:now.getFullYear(),m:now.getMonth()+1,tab:'today',dayOffset:0,who:'asst:0',planMode:'O',scrollToday:false};
+const FILTERS=[['all','All'],['doc','Doctors'],['asst','Assistants'],['cons','Consultants']];
+// The filter is shared by all pages. Consultants only apply on Today.
+const filt=()=>{ const f=db.settings.todayView||'all'; return (view.tab!=='today'&&f==='cons')?'all':f; };
+const teamsShown=()=>{ const f=filt(); return f==='doc'?['doc']:f==='asst'?['asst']:['doc','asst']; };
+const whoTeam=()=>view.who.split(':')[0], whoIdx=()=>+view.who.split(':')[1];
 
 function moveMonth(k){view.m+=k;if(view.m>12){view.m=1;view.y++;}if(view.m<1){view.m=12;view.y--;}render();window.scrollTo(0,0);}
 function setTab(t){ view.tab=t; if(t==='rota') view.scrollToday=true; render(); if(t!=='rota') window.scrollTo(0,0); }
-function setTeam(t){ view.team=t; view.who=0; view.planMode='O'; if(view.tab==='rota') view.scrollToday=true; render(); }
+function setFilter(v){
+  if(view.tab!=='today'&&v==='cons') return toast('Consultants show only on the Today page.');
+  db.settings.todayView=v; save();
+  if(!teamsShown().includes(whoTeam())) view.who=teamsShown()[0]+':0';
+  if(view.tab==='rota') view.scrollToday=true;
+  render();
+}
 function moveDay(k){view.dayOffset+=k;render();}
 function toast(msg){
   const el=document.getElementById('toast'); el.textContent=msg; el.classList.add('show');
@@ -483,24 +499,25 @@ function toast(msg){
 }
 
 function render(){
-  cur=computeMonth(view.team,view.y,view.m);
+  if(!teamsShown().includes(whoTeam())) view.who=teamsShown()[0]+':0';
   document.getElementById('clinicName').textContent=db.settings.clinic||'Clinic Rota';
   document.getElementById('monthTitle').textContent=`${MN[view.m-1]} ${view.y}`;
   document.getElementById('monthNav').style.display=(view.tab==='today'||view.tab==='settings')?'none':'flex';
   document.getElementById('shareBtn').style.display=view.tab==='settings'?'none':'inline-block';
   ['today','plan','rota','summary'].forEach(t=>document.getElementById('tab-'+t).classList.toggle('on',view.tab===t));
   const hs=document.getElementById('hdrSwitch');
-  if(view.tab==='today'){
-    const tv=db.settings.todayView;
-    hs.innerHTML=[['all','All'],['doc','Doctors'],['asst','Assistants'],['cons','Consultants']].map(([k,l])=>`<button role="tab" aria-selected="${tv===k}" class="${tv===k?'on':''}" onclick="setTodayView('${k}')">${l}</button>`).join('');
-    hs.style.display='flex';
-  }else if(view.tab==='settings'){ hs.style.display='none'; }
+  if(view.tab==='settings'){ hs.style.display='none'; }
   else{
-    hs.innerHTML=['asst','doc'].map(t=>`<button role="tab" aria-selected="${view.team===t}" class="${view.team===t?'on':''}" onclick="setTeam('${t}')">${TEAM[t].label}</button>`).join('');
+    const f=filt();
+    hs.innerHTML=FILTERS.map(([k,l])=>{
+      const dis=view.tab!=='today'&&k==='cons';
+      return `<button role="tab" aria-selected="${f===k}" class="${f===k?'on':''} ${dis?'dis':''}" ${dis?'aria-disabled="true"':''} onclick="setFilter('${k}')">${l}</button>`;
+    }).join('');
     hs.style.display='flex';
   }
   const main=document.getElementById('main');
-  main.innerHTML=view.tab==='today'?renderToday():view.tab==='plan'?renderPlan(cur):view.tab==='rota'?renderRota(cur):view.tab==='summary'?renderSummary(cur):renderSettings();
+  const R=view.tab==='today'||view.tab==='settings'?null:Object.fromEntries(teamsShown().map(t=>[t,computeMonth(t,view.y,view.m)]));
+  main.innerHTML=view.tab==='today'?renderToday():view.tab==='plan'?renderPlan(R):view.tab==='rota'?renderRota(R):view.tab==='summary'?renderSummary(R):renderSettings();
   document.documentElement.style.setProperty('--hh',document.getElementById('hdr').offsetHeight+'px');
   if(view.tab==='rota'&&view.scrollToday){
     view.scrollToday=false;
@@ -509,7 +526,6 @@ function render(){
   }
 }
 
-const teamSwitch=()=>`<div class="switch" role="tablist">${['asst','doc'].map(t=>`<button role="tab" aria-selected="${view.team===t}" class="${view.team===t?'on':''}" onclick="setTeam('${t}')">${TEAM[t].label}</button>`).join('')}</div>`;
 function stepsHtml(active){
   const s=[['plan','1. Off days'],['rota','2. Check rota'],['share','3. Share']];
   return `<div class="steps">${s.map(([k,l])=>`<button class="step ${active===k?'on':''}" onclick="${k==='share'?'shareImage()':`setTab('${k}')`}">${l}</button>`).join('')}</div>`;
@@ -574,7 +590,6 @@ function dayStrip(dd,da,cons,showNow,show){
   h+=`<div class="counts"><span>After 6 PM: ${cnt(1080)}</span><span>1 to 4 PM: ${cnt(840)}</span></div>`;
   return h+`</div>`;
 }
-function setTodayView(v){ db.settings.todayView=v; save(); render(); }
 function toggleCons(date,i){
   const [y,m]=parseIso(date), md=monthData(y,m,true);
   const c=md.cons[date]||{};
@@ -584,22 +599,27 @@ function toggleCons(date,i){
 }
 
 /* ---------- Off days planner ---------- */
-function renderPlan(r){
-  const team=r.team, sel=view.who, T=todayIso();
-  const target=team==='doc'?(+db.doctors.leaves||4):(+db.settings.offs||5), CLM=+db.doctors.cl||2;
-  const offOf=s=>team==='doc'?s.leave:s.off;
+function renderPlan(R){
+  const team=whoTeam(), sel=whoIdx(), r=R[team], T=todayIso(), CLM=+db.doctors.cl||2;
+  const tgt=t=>t==='doc'?(+db.doctors.leaves||4):(+db.settings.offs||5);
   let h=stepsHtml('plan');
-  h+=`<p class="tip">Choose a ${TEAM[team].one}. Then tap the days that person asked for. The site fills the rest of the ${target} ${team==='doc'?'leave':'off'} days.</p>`;
+  h+=`<p class="tip">Choose a person. Then tap the days that person asked for. The site fills the rest of the off days.</p>`;
   if(team==='doc') h+=`<div class="switch">
     <button class="${view.planMode==='O'?'on':''}" onclick="view.planMode='O';render()">Mark leave</button>
     <button class="${view.planMode==='CL'?'on':''}" onclick="view.planMode='CL';render()">Mark casual leave</button></div>`;
-  h+=`<div class="whos">${[0,1,2].map(i=>{
-    const s=r.stats[i], o=offOf(s), cls=o===target?'ok':'bad';
-    const sub=team==='doc'
-      ?`${s.req} asked, ${o-s.req} auto, ${s.sun} Sunday<br>Casual leave: ${s.cl} of ${CLM} used`
-      :`${s.req} asked, ${o-s.req} auto, ${s.sun} Sunday`;
-    return `<button class="who ${sel===i?'on':''}" style="--c:${COL[team][i]}" onclick="view.who=${i};render()">${badge(team,i,32)}
-      <div>${esc(nameOf(team,i))}<small>${sub}</small></div><span class="cnt ${cls}">${o}/${target}</span></button>`;}).join('')}</div>`;
+  teamsShown().forEach(t=>{
+    const rt=R[t], target=tgt(t);
+    if(teamsShown().length>1) h+=`<div class="grp" style="margin:4px 2px 6px">${TEAM[t].label}</div>`;
+    h+=`<div class="whos">${[0,1,2].map(i=>{
+      const s=rt.stats[i], o=t==='doc'?s.leave:s.off, cls=o===target?'ok':'bad';
+      const sub=t==='doc'
+        ?`${s.req} asked, ${o-s.req} auto, ${s.sun} Sunday<br>Casual leave: ${s.cl} of ${CLM} used`
+        :`${s.req} asked, ${o-s.req} auto, ${s.sun} Sunday`;
+      const on=team===t&&sel===i;
+      return `<button class="who ${on?'on':''}" style="--c:${COL[t][i]}" onclick="view.who='${t}:${i}';if('${t}'!=='doc')view.planMode='O';render()">${badge(t,i,32)}
+        <div>${esc(nameOf(t,i))}<small>${sub}</small></div><span class="cnt ${cls}">${o}/${target}</span></button>`;}).join('')}</div>`;
+  });
+  h+=`<p class="tip" style="margin-top:4px">Calendar for <b style="color:${COL[team][sel]}">${esc(nameOf(team,sel))}</b> and the other ${TEAM[team].label.toLowerCase()}.</p>`;
   h+=`<div class="calh">${['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(x=>`<div>${x}</div>`).join('')}</div><div class="cal">`;
   const lead=(r.days[0].dow+6)%7;
   for(let k=0;k<lead;k++) h+=`<div></div>`;
@@ -616,13 +636,14 @@ function renderPlan(r){
     <span class="chip" style="background:#fff;border:1px dashed #9aa9a5">Dashed: added by the site</span>
     ${team==='doc'?'<span class="chip" style="background:#fce7f3;color:#9d174d">CL: casual leave</span>':''}</div>`;
   if(team==='doc') h+=`<p class="small">The Morning doctor has no Sunday duty. The other two doctors take Sundays in turn. A Sunday off counts as a leave day.</p>`;
-  if(r.mw.length) h+=`<div class="alert"><ul>${r.mw.map(w=>`<li>${esc(w)}</li>`).join('')}</ul></div>`;
+  const mw=teamsShown().flatMap(t=>R[t].mw);
+  if(mw.length) h+=`<div class="alert"><ul>${mw.map(w=>`<li>${esc(w)}</li>`).join('')}</ul></div>`;
   h+=`<button class="btn primary" onclick="setTab('rota')">Make the rota</button>`;
   return h;
 }
 function planTap(date){
   if(date<todayIso()) return toast('This day is in the past.');
-  const team=view.team, i=view.who, [y,m,dd]=parseIso(date), td=teamData(team,y,m,true);
+  const team=whoTeam(), i=whoIdx(), [y,m,dd]=parseIso(date), td=teamData(team,y,m,true);
   const code=team==='doc'?view.planMode:'O';
   const dow=new Date(y,m-1,dd).getDay();
   if(team==='doc'&&dow===0&&db.doctors.defaults[i]==='DM') return toast(`${nameOf(team,i)} has no Sunday duty.`);
@@ -647,62 +668,79 @@ function cellHtml(team,d,i){
   const c=d.shifts[i], s=SH[c];
   return `<button class="cell ${d.locked[i]?'locked':''}" style="background:${s.bg};color:${s.fg}" onclick="openPick('${team}','${d.date}',${i})"><span class="ini">${esc(initials(team,i))}</span>${shShort(team,c)}<small>${team==='doc'&&c==='O'?'Day off':s.time}</small></button>`;
 }
-function renderRota(r){
-  const team=r.team, T=todayIso();
-  const dayWarn=r.days.filter(d=>d.warn.length).length;
-  const codes=team==='doc'?['DS','DE','DM','O','CL']:['S','SE','L','O'];
+const CODES={doc:['DS','DE','DM','O','CL'],asst:['S','SE','L','O']};
+function renderRota(R){
+  const T=todayIso(), teams=teamsShown(), both=teams.length>1;
   let h=stepsHtml('rota');
-  h+=`<div class="legend">${codes.map(k=>`<span class="chip" style="background:${SH[k].bg};color:${SH[k].fg}">${shLabel(team,k)}${SH[k].iv.length?' '+SH[k].time:''}</span>`).join('')}</div>`;
-  h+=r.shared
-    ? `<div class="info">You shared this rota on ${new Date(r.shared).getDate()} ${MN[new Date(r.shared).getMonth()].slice(0,3)}. A change now moves only the days after it.</div>`
-    : `<p class="tip">Tap a cell to change it or swap it. A dot means you set it.${team==='asst'?' Tap ⚡ for a busy 1–4 PM day.':' Tap a consultant to mark a day as not coming.'}</p>`;
-  if(r.mw.length||dayWarn){
-    h+=`<div class="alert"><b>Check this month</b><ul>${r.mw.map(w=>`<li>${esc(w)}</li>`).join('')}${dayWarn?`<li>${dayWarn} day(s) have a warning below.</li>`:''}</ul></div>`;
+  teams.forEach(t=>{
+    h+=`<div class="legend">${both?`<span class="chip" style="background:none;color:var(--mute);padding-left:0">${TEAM[t].label}</span>`:''}${CODES[t].map(k=>`<span class="chip" style="background:${SH[k].bg};color:${SH[k].fg}">${shLabel(t,k)}${SH[k].iv.length?' '+SH[k].time:''}</span>`).join('')}</div>`;
+  });
+  const shared=teams.filter(t=>R[t].shared);
+  h+=shared.length
+    ? `<div class="info">You shared the ${shared.map(t=>TEAM[t].label.toLowerCase()).join(' and ')} rota. A change now moves only the days after it.</div>`
+    : `<p class="tip">Tap a cell to change it or swap it. A dot means you set it.${teams.includes('asst')?' Tap ⚡ for a busy 1–4 PM day.':''}${teams.includes('doc')?' Tap a consultant to mark a day as not coming.':''}</p>`;
+  const mw=teams.flatMap(t=>R[t].mw);
+  const dayWarn=R[teams[0]].days.filter((d,k)=>teams.some(t=>R[t].days[k].warn.length)).length;
+  if(mw.length||dayWarn){
+    h+=`<div class="alert"><b>Check this month</b><ul>${mw.map(w=>`<li>${esc(w)}</li>`).join('')}${dayWarn?`<li>${dayWarn} day(s) have a warning below.</li>`:''}</ul></div>`;
   }
-  h+=`<div class="${team==='doc'?'doc':''}">`;
-  h+=`<div class="ghead"><div class="plain">Date</div>${[0,1,2].map(i=>`<div style="background:${COL[team][i]}">${esc(nameOf(team,i))}</div>`).join('')}${team==='asst'?'<div class="plain">Busy</div>':''}</div>`;
-  r.days.forEach(d=>{
-    const cons=team==='doc'?consFor(d.date):[];
-    h+=`<div class="day ${d.dow===0?'sun':''} ${d.date===T?'today':''}" id="d-${d.date}">
-      <div class="row">
-        <div class="date"><b>${d.day}</b><span>${WD[d.dow]}</span></div>
-        ${[0,1,2].map(i=>cellHtml(team,d,i)).join('')}
-        ${team==='asst'?`<button class="busy ${d.busy?'on':''}" onclick="toggleBusy('${d.date}')" aria-label="Busy day">⚡</button>`:''}
-      </div>
-      ${cons.length?`<div class="consline">${cons.map(c=>`<button class="cons ${c.absent?'absent':''}" onclick="toggleCons('${d.date}',${c.i})">${esc(c.name)} ${c.time}</button>`).join('')}</div>`:''}
-      ${d.warn.map(w=>`<div class="warn">⚠ ${esc(w)}</div>`).join('')}
-    </div>`;
+  const cls=both?'both':(teams[0]==='doc'?'doc':'');
+  h+=`<div class="${cls}"><div class="ghead">`;
+  teams.forEach((t,n)=>{
+    h+=`<div class="hrow"><div class="plain">${n===0?'Date':''}</div>${[0,1,2].map(i=>`<div style="background:${COL[t][i]}">${esc(nameOf(t,i))}</div>`).join('')}${t==='asst'?'<div class="plain">Busy</div>':(both?'<div class="plain"></div>':'')}</div>`;
+  });
+  h+=`</div>`;
+  R[teams[0]].days.forEach((d0,k)=>{
+    h+=`<div class="day ${d0.dow===0?'sun':''} ${d0.date===T?'today':''}" id="d-${d0.date}">`;
+    teams.forEach((t,n)=>{
+      const d=R[t].days[k];
+      h+=`<div class="row ${n?'second':''}">
+        <div class="date">${n===0?`<b>${d.day}</b><span>${WD[d.dow]}</span>`:''}</div>
+        ${[0,1,2].map(i=>cellHtml(t,d,i)).join('')}
+        ${t==='asst'?`<button class="busy ${d.busy?'on':''}" onclick="toggleBusy('${d.date}')" aria-label="Busy day">⚡</button>`:(both?'<div></div>':'')}
+      </div>`;
+      if(t==='doc'){
+        const cons=consFor(d.date);
+        if(cons.length) h+=`<div class="consline">${cons.map(c=>`<button class="cons ${c.absent?'absent':''}" onclick="toggleCons('${d.date}',${c.i})">${esc(c.name)} ${c.time}</button>`).join('')}</div>`;
+      }
+    });
+    teams.forEach(t=>{ h+=R[t].days[k].warn.map(w=>`<div class="warn">⚠ ${both?TEAM[t].label+': ':''}${esc(w)}</div>`).join(''); });
+    h+=`</div>`;
   });
   h+=`</div><button class="btn primary" onclick="shareImage()">Share this month</button>`;
   return h;
 }
 
 /* ---------- Summary ---------- */
-function renderSummary(r){
-  const team=r.team;
+function renderSummary(R){
+  const teams=teamsShown();
   let h='';
-  if(team==='asst'){
-    const OFFS=+db.settings.offs||5;
-    h+=`<div class="card"><h2>${MN[r.m-1]} ${r.y}</h2><table>
-      <tr><th>Assistant</th><th>Off</th><th>Sun off</th><th>Split</th><th>Second</th><th>Morn.</th></tr>
-      ${r.stats.map((s,i)=>`<tr><td><span style="color:${COL.asst[i]};font-weight:700">${esc(nameOf(team,i))}</span></td><td>${s.off}/${OFFS}</td><td>${s.sun}</td><td>${s.S}</td><td>${s.SE}</td><td>${s.L}</td></tr>`).join('')}
-    </table></div>`;
-  }else{
-    const LV=+db.doctors.leaves||4, CLM=+db.doctors.cl||2;
-    h+=`<div class="card"><h2>${MN[r.m-1]} ${r.y}</h2><table>
-      <tr><th>Doctor</th><th>Leave</th><th>CL</th><th>Sun off</th><th>Split</th><th>Second</th><th>Morn.</th></tr>
-      ${r.stats.map((s,i)=>`<tr><td><span style="color:${COL.doc[i]};font-weight:700">${esc(nameOf(team,i))}</span></td><td>${s.leave}/${LV}</td><td>${s.cl}/${CLM}</td><td>${s.sun}</td><td>${s.DS}</td><td>${s.DE}</td><td>${s.DM}</td></tr>`).join('')}
-    </table><p class="small">Casual leave does not carry forward. Unused casual leave lapses at the end of the month.</p></div>`;
-  }
-  const rows=[0,1,2].filter(i=>team==='asst'||db.doctors.defaults[i]!=='DM');
+  teams.forEach(team=>{
+    const r=R[team];
+    if(team==='asst'){
+      const OFFS=+db.settings.offs||5;
+      h+=`<div class="card"><h2>Assistants, ${MN[r.m-1]} ${r.y}</h2><table>
+        <tr><th>Assistant</th><th>Off</th><th>Sun off</th><th>Split</th><th>Second</th><th>Morn.</th></tr>
+        ${r.stats.map((s,i)=>`<tr><td><span style="color:${COL.asst[i]};font-weight:700">${esc(nameOf(team,i))}</span></td><td>${s.off}/${OFFS}</td><td>${s.sun}</td><td>${s.S}</td><td>${s.SE}</td><td>${s.L}</td></tr>`).join('')}
+      </table></div>`;
+    }else{
+      const LV=+db.doctors.leaves||4, CLM=+db.doctors.cl||2;
+      h+=`<div class="card"><h2>Doctors, ${MN[r.m-1]} ${r.y}</h2><table>
+        <tr><th>Doctor</th><th>Leave</th><th>CL</th><th>Sun off</th><th>Split</th><th>Second</th><th>Morn.</th></tr>
+        ${r.stats.map((s,i)=>`<tr><td><span style="color:${COL.doc[i]};font-weight:700">${esc(nameOf(team,i))}</span></td><td>${s.leave}/${LV}</td><td>${s.cl}/${CLM}</td><td>${s.sun}</td><td>${s.DS}</td><td>${s.DE}</td><td>${s.DM}</td></tr>`).join('')}
+      </table><p class="small">Casual leave does not carry forward. Unused casual leave lapses at the end of the month.</p></div>`;
+    }
+  });
   h+=`<div class="card"><h2>Sunday off balance</h2><table>
-    <tr><th>${team==='doc'?'Doctor':'Assistant'}</th><th>Before this month</th><th>After this month</th></tr>
-    ${rows.map(i=>`<tr><td>${esc(nameOf(team,i))}</td><td>${r.carry[i]}</td><td>${r.carry[i]+r.stats[i].sun}</td></tr>`).join('')}
+    <tr><th>Person</th><th>Before this month</th><th>After this month</th></tr>
+    ${teams.flatMap(team=>[0,1,2].filter(i=>team==='asst'||db.doctors.defaults[i]!=='DM').map(i=>`<tr><td><span style="color:${COL[team][i]};font-weight:700">${esc(nameOf(team,i))}</span></td><td>${R[team].carry[i]}</td><td>${R[team].carry[i]+R[team].stats[i].sun}</td></tr>`)).join('')}
   </table><p class="small">The site gives the next Sunday off to the person with the lowest balance. This balance carries forward to the next month.</p></div>`;
-  if(r.mw.length) h+=`<div class="alert"><b>Leave check</b><ul>${r.mw.map(w=>`<li>${esc(w)}</li>`).join('')}</ul></div>`;
-  h+=`<div class="card"><h2>Rebalance</h2><p class="small">Use this when the staff have not seen the rota yet. The site keeps past days and your set cells. It recalculates all other days from today.</p>
+  const mw=teams.flatMap(t=>R[t].mw);
+  if(mw.length) h+=`<div class="alert"><b>Leave check</b><ul>${mw.map(w=>`<li>${esc(w)}</li>`).join('')}</ul></div>`;
+  const who=teams.map(t=>TEAM[t].label.toLowerCase()).join(' and ');
+  h+=`<div class="card"><h2>Rebalance</h2><p class="small">Use this when the staff have not seen the rota yet. The site keeps past days and your set cells. It recalculates the ${who} from today.</p>
     <button class="btn" onclick="recalcFuture()">Recalculate from today</button></div>
-  <div class="card"><h2>Reset</h2><p class="small">This removes your set cells and requests for the ${TEAM[team].label.toLowerCase()} in ${MN[r.m-1]} from today on. Past days stay.</p>
+  <div class="card"><h2>Reset</h2><p class="small">This removes your set cells and requests for the ${who} in ${MN[view.m-1]} from today on. Past days stay.</p>
     <button class="btn danger" onclick="resetMonth()">Clear changes for this month</button></div>`;
   return h;
 }
@@ -803,16 +841,21 @@ function swapCells(team,date,i,k){
 function keepScroll(fn){const y=window.scrollY;fn();window.scrollTo(0,y);}
 
 function recalcFuture(){
-  const T=todayIso(), td=teamData(view.team,view.y,view.m,true);
-  Object.keys(td.snap).forEach(k=>{ if(k>=T) delete td.snap[k]; });
-  td.shared=null; save(); render(); toast('The site recalculated the days from today.');
+  const T=todayIso();
+  teamsShown().forEach(t=>{ const td=teamData(t,view.y,view.m,true); Object.keys(td.snap).forEach(k=>{ if(k>=T) delete td.snap[k]; }); td.shared=null; });
+  save(); render(); toast('The site recalculated the days from today.');
 }
 function resetMonth(){
-  if(!confirm(`Clear your changes for the ${TEAM[view.team].label.toLowerCase()} in ${MN[view.m-1]} ${view.y} from today on?`)) return;
-  const T=todayIso(), md=monthData(view.y,view.m,true), td=teamData(view.team,view.y,view.m,true);
-  const fields=view.team==='asst'?[[md,'cells'],[md,'busy'],[md,'snap']]:[[td,'cells'],[td,'snap']];
-  fields.forEach(([o,f])=>Object.keys(o[f]).forEach(k=>{ if(k>=T) delete o[f][k]; }));
-  td.shared=null; save(); render(); toast('The month is reset from today.');
+  const who=teamsShown().map(t=>TEAM[t].label.toLowerCase()).join(' and ');
+  if(!confirm(`Clear your changes for the ${who} in ${MN[view.m-1]} ${view.y} from today on?`)) return;
+  const T=todayIso(), md=monthData(view.y,view.m,true);
+  teamsShown().forEach(t=>{
+    const td=teamData(t,view.y,view.m,true);
+    const fields=t==='asst'?[[md,'cells'],[md,'busy'],[md,'snap']]:[[td,'cells'],[td,'snap']];
+    fields.forEach(([o,f])=>Object.keys(o[f]).forEach(k=>{ if(k>=T) delete o[f][k]; }));
+    td.shared=null;
+  });
+  save(); render(); toast('The month is reset from today.');
 }
 
 function exportData(){
@@ -860,8 +903,8 @@ async function shareDay(date){
   window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank');
 }
 
-function shareImage(){
-  const r=cur, team=r.team, n=r.days.length, W=1000, rowH=38, top=150, colW=(W-160)/3;
+function drawRota(team,y,m){
+  const r=computeMonth(team,y,m), n=r.days.length, W=1000, rowH=38, top=150, colW=(W-160)/3;
   const consNote=team==='doc'?db.consultants.map(c=>`${c.name}: ${c.days.slice().sort((a,b)=>((a+6)%7)-((b+6)%7)).map(w=>WD[w]).join(', ')} ${fmtRange(+c.start,+c.end)}`):[];
   const H=top+rowH*n+120+consNote.length*30;
   const c=document.createElement('canvas'); c.width=W; c.height=H;
@@ -869,22 +912,22 @@ function shareImage(){
   g.fillStyle='#ffffff'; g.fillRect(0,0,W,H);
   g.fillStyle='#0b4f4a'; g.fillRect(0,0,W,96);
   g.fillStyle='#fff'; g.font=`bold 34px ${F}`; g.fillText(`${db.settings.clinic||'Clinic'}: ${TEAM[team].label} rota`,30,48);
-  g.font=`22px ${F}`; g.fillText(`${MN[r.m-1]} ${r.y}`,30,82);
+  g.font=`22px ${F}`; g.fillText(`${MN[m-1]} ${y}`,30,82);
   g.font=`bold 20px ${F}`;
   g.fillStyle='#374151'; g.fillText('Date',30,top-18);
   [0,1,2].forEach(i=>{ g.fillStyle=COL[team][i]; g.textAlign='center'; g.fillText(nameOf(team,i).slice(0,20),160+colW*i+colW/2,top-18); g.textAlign='left'; });
   r.days.forEach((d,k)=>{
-    const y=top+k*rowH;
-    if(d.dow===0){ g.fillStyle='#f2f8f6'; g.fillRect(0,y,W,rowH); }
+    const yy=top+k*rowH;
+    if(d.dow===0){ g.fillStyle='#f2f8f6'; g.fillRect(0,yy,W,rowH); }
     g.fillStyle='#15302b'; g.font=`bold 18px ${F}`;
-    g.fillText(`${pad(d.day)} ${WD[d.dow]}${d.busy?' ⚡':''}`,30,y+25);
+    g.fillText(`${pad(d.day)} ${WD[d.dow]}${d.busy?' ⚡':''}`,30,yy+25);
     d.shifts.forEach((s,i)=>{
       const x=160+colW*i+6, sh=SH[s];
-      g.fillStyle=sh.bg; roundRect(g,x,y+4,colW-12,rowH-8,8); g.fill();
+      g.fillStyle=sh.bg; roundRect(g,x,yy+4,colW-12,rowH-8,8); g.fill();
       g.fillStyle=sh.fg; g.font=`bold 17px ${F}`; g.textAlign='center';
-      g.fillText(sh.iv.length?`${sh.label} (${sh.time})`:shLabel(team,s).toUpperCase(),x+(colW-12)/2,y+25); g.textAlign='left';
+      g.fillText(sh.iv.length?`${sh.label} (${sh.time})`:shLabel(team,s).toUpperCase(),x+(colW-12)/2,yy+25); g.textAlign='left';
     });
-    g.strokeStyle='#d8e2de'; g.beginPath(); g.moveTo(20,y+rowH); g.lineTo(W-20,y+rowH); g.stroke();
+    g.strokeStyle='#d8e2de'; g.beginPath(); g.moveTo(20,yy+rowH); g.lineTo(W-20,yy+rowH); g.stroke();
   });
   g.fillStyle='#5f726d'; g.font=`17px ${F}`;
   const legend=team==='doc'
@@ -893,16 +936,22 @@ function shareImage(){
   g.fillText(legend,30,top+rowH*n+45);
   g.fillText(team==='doc'?'CL = casual leave':'⚡ = busy day (extra cover 1–4 PM)',30,top+rowH*n+75);
   consNote.forEach((t,k)=>g.fillText(t,30,top+rowH*n+105+k*30));
-  const markShared=()=>{ const td=teamData(team,r.y,r.m,true); if(!td.shared){ td.shared=Date.now(); save(); render(); toast('Marked as shared. Later changes move only the days after them.'); } };
-  c.toBlob(async b=>{
-    const file=new File([b],`${team==='doc'?'doctor':'assistant'}-rota-${ymKey(r.y,r.m)}.png`,{type:'image/png'});
-    if(navigator.canShare&&navigator.canShare({files:[file]})){
-      try{ await navigator.share({files:[file],title:`${TEAM[team].label} rota ${MN[r.m-1]} ${r.y}`}); markShared(); }catch(e){}
-    }else{
-      const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download=file.name;
-      document.body.appendChild(a); a.click(); a.remove(); markShared();
-    }
-  },'image/png');
+  return new Promise(res=>c.toBlob(b=>res(new File([b],`${team==='doc'?'doctor':'assistant'}-rota-${ymKey(y,m)}.png`,{type:'image/png'})),'image/png'));
+}
+async function shareImage(){
+  const teams=teamsShown(), y=view.y, m=view.m;
+  const files=await Promise.all(teams.map(t=>drawRota(t,y,m)));
+  const markShared=()=>{
+    let ch=false;
+    teams.forEach(t=>{ const td=teamData(t,y,m,true); if(!td.shared){ td.shared=Date.now(); ch=true; } });
+    if(ch){ save(); render(); toast('Marked as shared. Later changes move only the days after them.'); }
+  };
+  if(navigator.canShare&&navigator.canShare({files})){
+    try{ await navigator.share({files,title:`Rota ${MN[m-1]} ${y}`}); markShared(); }catch(e){}
+  }else{
+    files.forEach(f=>{ const a=document.createElement('a'); a.href=URL.createObjectURL(f); a.download=f.name; document.body.appendChild(a); a.click(); a.remove(); });
+    markShared();
+  }
 }
 function roundRect(g,x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath();}
 
