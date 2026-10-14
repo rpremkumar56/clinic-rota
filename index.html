@@ -29,8 +29,6 @@ header{position:sticky;top:0;z-index:5;background:var(--paper);color:var(--ink);
 .clinic{font-family:var(--serif);font-size:30px;line-height:1;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .share{background:var(--ink);color:#fff;border:0;border-radius:999px;padding:9px 18px;font-weight:600;font-size:14px}
 .gear{background:var(--cream);border:0;color:var(--ink);border-radius:999px;width:40px;height:40px;font-size:18px}
-.month{display:flex;align-items:center;gap:8px;margin-top:10px}
-.month h1{font-family:var(--serif);font-weight:400;font-size:30px;line-height:1.1;margin:0;flex:1;text-align:center}
 .icon{background:var(--cream);border:0;color:var(--ink);border-radius:999px;width:42px;height:42px;font-size:20px}
 main{padding:14px 16px;max-width:640px;margin:0 auto}
 h2{font-family:var(--serif);font-weight:400;font-size:26px;line-height:1.1;margin:0 0 10px}
@@ -44,9 +42,6 @@ h2{font-family:var(--serif);font-weight:400;font-size:26px;line-height:1.1;margi
 .both .ghead{grid-template-rows:auto auto;row-gap:4px}
 .both .day{scroll-margin-top:calc(var(--hh) + 112px)}
 .both .row.second{margin-top:6px;padding-top:6px;border-top:1px dashed var(--line)}
-.steps{display:flex;gap:6px;margin-bottom:12px}
-.step{flex:1;text-align:center;font-size:13px;font-weight:600;padding:9px 4px;border-radius:999px;background:var(--cream);color:var(--mute);border:0}
-.step.on{background:var(--brand-2);color:#fff}
 .legend{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
 .chip{font-size:12px;padding:5px 10px;border-radius:999px;font-weight:600}
 .tip{font-size:14px;color:var(--mute);margin:0 2px 12px}
@@ -100,38 +95,10 @@ input[type=text],input[type=number],input[type=month],input[type=time],select{wi
 .small{font-size:13px;color:var(--mute);line-height:1.55}
 .badge{width:36px;height:36px;border-radius:50%;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;letter-spacing:-.02em;flex:none}
 /* Today */
-.daynav{display:flex;align-items:flex-end;gap:8px;margin:6px 0 16px}
-.daynav div{flex:1}
-.daynav b{display:block;font-family:var(--serif);font-weight:400;font-size:52px;line-height:.95;letter-spacing:-.01em}
-.daynav span{font-size:15px;color:var(--ink);font-weight:500;display:block;margin-top:6px}
-.daynav button{border:0;background:var(--cream);border-radius:999px;width:44px;height:44px;font-size:20px;color:var(--ink)}
-.grouphead{display:flex;align-items:baseline;justify-content:space-between;margin:18px 2px 10px}
-.grouphead h2{margin:0}
-.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.tile{border:0;border-radius:26px;padding:14px 14px 16px;min-height:132px;text-align:left;display:flex;flex-direction:column;justify-content:space-between;position:relative}
-.tile .tn{font-size:14px;font-weight:600;color:var(--ink);padding-right:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.tile .ts{font-family:var(--serif);font-size:34px;line-height:1;margin-top:18px}
-.tile .tt{font-size:13px;font-weight:500;opacity:.85;margin-top:4px}
-.tile.locked::after{content:"";position:absolute;top:18px;right:16px;width:8px;height:8px;border-radius:50%;background:currentColor;opacity:.7}
-.busypill{display:block;width:100%;margin-top:10px;border:1px dashed var(--sand);background:#fff;border-radius:999px;padding:12px 16px;font-size:14px;font-weight:600;text-align:left;color:var(--ink)}
-.busypill.on{background:#FFF1CF;border:1px solid #FFC857}
-.busypill span{color:var(--mute);font-weight:500}
-.strip{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:14px 14px 10px;margin:0 0 6px}
-.grp{font-size:12px;font-weight:600;color:var(--mute);margin:10px 0 2px}
-.grp:first-child{margin-top:0}
-.srow{display:grid;grid-template-columns:36px 1fr;gap:8px;align-items:center;margin:6px 0}
-.srow .sl{font-size:11px;font-weight:700}
-.track{position:relative;height:18px;background:#F6F0EA;border-radius:999px;overflow:hidden}
-.bar{position:absolute;top:2px;bottom:2px;border-radius:999px}
-.line6{position:absolute;top:0;bottom:0;border-left:2px dashed #F0A79D}
-.now{position:absolute;top:-2px;bottom:-2px;border-left:2px solid var(--flame)}
 .ticks{position:relative;height:18px;margin-left:44px;margin-top:4px}
 .tick{position:absolute;font-size:11px;color:var(--mute);transform:translateX(-50%);white-space:nowrap}
 .tick:first-child{transform:none}
 .tick:last-child{transform:translateX(-100%)}
-.counts{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
-.counts span{font-size:13px;background:var(--cream);border-radius:999px;padding:5px 11px}
-.counts b{font-size:14px}
 /* Planner */
 .whos{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
 .who{display:flex;align-items:center;gap:12px;border:2px solid var(--line);border-radius:20px;padding:10px 12px;background:#fff;text-align:left;font-size:15px;font-weight:600}
@@ -166,21 +133,100 @@ input[type=text],input[type=number],input[type=month],input[type=time],select{wi
 .sub{font-size:13px;font-weight:600;color:var(--mute);margin:14px 2px 8px}
 #toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:11px 18px;border-radius:999px;font-size:14px;font-weight:500;z-index:30;opacity:0;transition:opacity .2s;pointer-events:none;max-width:90vw;text-align:center}
 #toast.show{opacity:1}
+
+/* Header (single line) */
+.top{min-height:42px}
+.mnav{display:flex;align-items:center;gap:2px;flex:1;min-width:0}
+.mnav h1{font-family:var(--serif);font-weight:400;font-size:26px;line-height:1;margin:0 6px;white-space:nowrap}
+.mnav .icon{width:34px;height:34px;font-size:18px;flex:none}
+.share{white-space:nowrap}
+/* Today: title + week strip */
+.dhead{display:flex;align-items:flex-end;justify-content:space-between;gap:8px;margin:0 2px 10px}
+.dhead b{display:block;font-family:var(--serif);font-weight:400;font-size:40px;line-height:.95}
+.dhead span{display:block;font-size:14px;font-weight:500;color:var(--mute);margin-top:4px}
+.backtoday{border:0;background:var(--cream);border-radius:999px;padding:8px 14px;font-size:13px;font-weight:600;white-space:nowrap}
+.week{display:grid;grid-template-columns:28px repeat(7,minmax(0,1fr)) 28px;gap:4px;align-items:center;margin-bottom:12px}
+.week .wk{border:0;background:none;font-size:20px;height:50px;padding:0;color:var(--ink)}
+.wd{border:0;background:var(--cream);border-radius:16px;height:50px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:0;position:relative}
+.wd small{font-size:10px;font-weight:600;color:var(--mute)}
+.wd b{font-size:16px;font-weight:700}
+.wd.istoday::after{content:"";position:absolute;bottom:5px;width:4px;height:4px;border-radius:50%;background:var(--brand-2)}
+.wd.on{background:var(--ink);color:#fff}
+.wd.on small{color:rgba(255,255,255,.7)}
+.wd.on.istoday::after{background:#fff}
+/* Today: chart */
+.chart{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:12px 12px 10px}
+.ghd{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:26px;margin:8px 0 2px;font-size:12px;font-weight:600;color:var(--mute)}
+.ghd:first-child{margin-top:0}
+.busychip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:4px 10px;font-size:12px;font-weight:600;color:var(--mute)}
+.busychip.on{background:#FFF1CF;border-color:#FFC857;color:#4A3300}
+.crow{display:grid;grid-template-columns:40px 1fr;gap:6px;align-items:center;width:100%;border:0;background:none;padding:3px 0;text-align:left}
+.crow .lb{font-size:12px;font-weight:700;display:flex;align-items:center;gap:3px}
+.crow .lb i{width:6px;height:6px;border-radius:50%;background:currentColor;display:inline-block}
+.trk{position:relative;height:28px;background:#F6F0EA;border-radius:999px}
+.trk.offtrk{background:repeating-linear-gradient(135deg,#F6F0EA 0 6px,#EEE4DA 6px 12px)}
+.seg{position:absolute;top:2px;bottom:2px;border-radius:999px}
+.segt{position:absolute;top:0;bottom:0;display:flex;align-items:center;font-size:11px;font-weight:700;white-space:nowrap;padding-left:8px;pointer-events:none}
+.offt{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600}
+.trk .line6{position:absolute;top:-2px;bottom:-2px;border-left:2px dashed #F0A79D}
+.trk .now{position:absolute;top:-3px;bottom:-3px;border-left:2px solid var(--flame)}
+.ticks{margin-left:46px}
+.cnts{font-size:12px;color:var(--mute);margin-top:8px;line-height:1.6}
+.cnts b{color:var(--ink)}
+.none{font-size:12px;color:var(--mute);padding:4px 0}
+/* Off days: sticky picker */
+.picker{position:sticky;top:var(--hh);z-index:4;background:var(--paper);padding:6px 0 10px;margin-bottom:4px}
+.chips{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.pchip{display:flex;align-items:center;justify-content:space-between;gap:4px;border:2px solid var(--line);background:#fff;border-radius:999px;padding:7px 11px;font-size:13px;font-weight:700;color:var(--c)}
+.pchip .ct{font-size:12px;font-weight:600;color:var(--mute)}
+.pchip .ct.bad{color:var(--warn)}
+.pchip.on{background:var(--c);border-color:var(--c);color:#fff}
+.pchip.on .ct{color:rgba(255,255,255,.85)}
+.pchip.on .ct.bad{color:#fff;background:var(--flame);border-radius:999px;padding:0 6px}
+.pline{display:flex;align-items:center;gap:8px;margin-top:8px}
+.pline .txt{flex:1;font-size:13px;color:var(--mute);line-height:1.35}
+.pline .txt b{color:var(--ink)}
+.pline .switch{flex:1;margin:0}
+.pline .switch button{padding:7px 4px;font-size:13px}
+.qbtn{flex:none;width:34px;height:34px;border-radius:999px;border:0;background:var(--cream);font-weight:700;font-size:15px}
+.cday{min-height:54px}
+/* Rota: compact */
+.cell{height:38px}
+.day{padding:5px;margin-bottom:6px}
+.date b{font-size:22px}
+.both .row.second{margin-top:4px;padding-top:4px}
+.busy{height:38px}
+.cell .ini{margin-bottom:0}
+.dcons{display:flex;flex-direction:column;align-items:center;gap:2px;margin-top:3px}
+.dcons button{border:0;background:#E3E1EC;color:var(--ink);border-radius:999px;font-size:9px;font-weight:700;padding:1px 5px}
+.dcons button.absent{text-decoration:line-through;background:#fff;color:#A8968A;border:1px dashed var(--sand)}
+.legend .chip{font-size:11px;padding:4px 8px}
+.legend .lt{font-size:11px;font-weight:600;color:var(--mute);padding:4px 2px}
+.fab{position:fixed;right:16px;bottom:calc(76px + env(safe-area-inset-bottom));z-index:7;border:0;background:var(--ink);color:#fff;border-radius:999px;padding:11px 18px;font-weight:600;font-size:14px;box-shadow:0 6px 18px rgba(39,45,78,.25);display:none}
+.fab.show{display:block}
+/* Toast with undo */
+#toast.act{pointer-events:auto}
+#toast{display:flex;align-items:center;gap:4px;width:max-content;max-width:92vw}
+#toast .undo{border:0;background:#fff;color:var(--ink);border-radius:999px;padding:4px 12px;margin-left:10px;font-weight:700;font-size:13px}
+details.more summary{cursor:pointer;font-weight:600;list-style:none}
+details.more summary::-webkit-details-marker{display:none}
+details.more summary::after{content:" ▾";color:var(--mute)}
+details.more[open] summary::after{content:" ▴"}
 </style>
 </head>
 <body>
 <header id="hdr">
   <div class="top">
     <div class="clinic" id="clinicName"></div>
+    <div class="mnav" id="monthNav">
+      <button class="icon" onclick="moveMonth(-1)" aria-label="Previous month">‹</button>
+      <h1 id="monthTitle"></h1>
+      <button class="icon" onclick="moveMonth(1)" aria-label="Next month">›</button>
+    </div>
     <button class="share" id="shareBtn" onclick="shareNow()">Share</button>
     <button class="gear" onclick="setTab('settings')" aria-label="Settings">⚙</button>
   </div>
   <div class="switch hdr" id="hdrSwitch" role="tablist"></div>
-  <div class="month" id="monthNav">
-    <button class="icon" onclick="moveMonth(-1)" aria-label="Previous month">‹</button>
-    <h1 id="monthTitle"></h1>
-    <button class="icon" onclick="moveMonth(1)" aria-label="Next month">›</button>
-  </div>
 </header>
 <main id="main"></main>
 <nav>
@@ -193,6 +239,7 @@ input[type=text],input[type=number],input[type=month],input[type=time],select{wi
   <div class="sheet-bg" onclick="closeSheet()"></div>
   <div class="sheet-card" role="dialog" aria-modal="true"><div class="sheet-title" id="sheetTitle"></div><div id="sheetOpts"></div></div>
 </div>
+<button class="fab" id="fabToday" onclick="goToday()">Today</button>
 <div id="toast" role="status"></div>
 
 <script>
@@ -499,17 +546,30 @@ function setFilter(v){
 }
 function hideBackup(){ db.settings.backupHiddenAt=Date.now(); save(); render(); toast('The reminder comes back in 7 days.'); }
 function moveDay(k){view.dayOffset+=k;render();}
-function toast(msg){
-  const el=document.getElementById('toast'); el.textContent=msg; el.classList.add('show');
-  clearTimeout(toast.t); toast.t=setTimeout(()=>el.classList.remove('show'),2600);
+function setDay(k){view.dayOffset=k;render();}
+function goToday(){ view.y=now.getFullYear(); view.m=now.getMonth()+1; view.scrollToday=true; render(); }
+let undoSnap=null;
+const snapshot=()=>JSON.stringify(db.months);
+function doUndo(){ if(!undoSnap) return; db.months=JSON.parse(undoSnap); undoSnap=null; save(); keepScroll(render); toast('The change is undone.'); }
+function toast(msg,undo){
+  const el=document.getElementById('toast');
+  el.innerHTML=esc(msg)+(undo?'<button class="undo" onclick="doUndo()">Undo</button>':'');
+  el.classList.toggle('act',!!undo); undoSnap=undo||null;
+  el.classList.add('show');
+  clearTimeout(toast.t); toast.t=setTimeout(()=>{ el.classList.remove('show','act'); },undo?5000:2600);
 }
 
 function render(){
   if(!teamsShown().includes(whoTeam())) view.who=teamsShown()[0]+':0';
-  document.getElementById('clinicName').textContent=db.settings.clinic||'Clinic Rota';
-  document.getElementById('monthTitle').textContent=`${MN[view.m-1]} ${view.y}`;
-  document.getElementById('monthNav').style.display=(view.tab==='today'||view.tab==='settings')?'none':'flex';
-  document.getElementById('shareBtn').style.display=view.tab==='settings'?'none':'inline-block';
+  const monthly=view.tab!=='today'&&view.tab!=='settings';
+  const cn=document.getElementById('clinicName');
+  cn.textContent=db.settings.clinic||'Clinic Rota'; cn.style.display=monthly?'none':'block';
+  document.getElementById('monthTitle').textContent=`${MN[view.m-1].slice(0,3)} ${view.y}`;
+  document.getElementById('monthNav').style.display=monthly?'flex':'none';
+  const sb=document.getElementById('shareBtn');
+  sb.style.display=view.tab==='settings'?'none':'inline-block';
+  sb.textContent=view.tab==='today'?'Send day':'Share month';
+  document.getElementById('fabToday').classList.toggle('show',view.tab==='rota');
   ['today','plan','rota','summary'].forEach(t=>document.getElementById('tab-'+t).classList.toggle('on',view.tab===t));
   const hs=document.getElementById('hdrSwitch');
   if(view.tab==='settings'){ hs.style.display='none'; }
@@ -532,102 +592,108 @@ function render(){
   }
 }
 
-function stepsHtml(active){
-  const s=[['plan','1. Off days'],['rota','2. Check rota'],['share','3. Share']];
-  return `<div class="steps">${s.map(([k,l])=>`<button class="step ${active===k?'on':''}" onclick="${k==='share'?'shareImage()':`setTab('${k}')`}">${l}</button>`).join('')}</div>`;
-}
 const badge=(team,i,size)=>`<span class="badge" style="background:${COL[team][i]}${size?`;width:${size}px;height:${size}px;font-size:${Math.round(size/3.3)}px`:''}">${esc(initials(team,i))}</span>`;
 
 /* ---------- Today ---------- */
+const FULLWD=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const ini3=n=>String(n).replace(/^dr\.?\s*/i,'').replace(/[^A-Za-z0-9]/g,'').slice(0,3).toUpperCase();
 function renderToday(){
-  const base=new Date(); base.setDate(base.getDate()+view.dayOffset);
+  const base=new Date(); base.setHours(12,0,0,0); base.setDate(base.getDate()+view.dayOffset);
   const date=isoOf(base), da=dayInfo('asst',date), dd=dayInfo('doc',date), tv=db.settings.todayView;
   const cons=consFor(date), show=k=>tv==='all'||tv===k;
-  const label=view.dayOffset===0?'Today':view.dayOffset===1?'Tomorrow':view.dayOffset===-1?'Yesterday':WD[base.getDay()];
+  const off=view.dayOffset;
+  const label=off===0?'Today':off===1?'Tomorrow':off===-1?'Yesterday':FULLWD[base.getDay()];
+  const sub=[0,1,-1].includes(off)?`${FULLWD[base.getDay()]}, ${base.getDate()} ${MN[base.getMonth()]}`:`${base.getDate()} ${MN[base.getMonth()]} ${base.getFullYear()}`;
   let h='';
-  if(defaultNames('asst')||defaultNames('doc')) h+=`<div class="info"><b>First step:</b> add the names of the doctors and assistants.<button class="btn primary" onclick="setTab('settings')">Add names</button></div>`;
   const lb=db.settings.lastBackup, hasData=Object.values(db.months).some(md=>Object.keys(md.cells||{}).length||Object.keys(md.busy||{}).length||Object.keys((md.doc||{}).cells||{}).length);
   const snz=db.settings.backupHiddenAt||0, week=7*864e5;
   if(hasData&&(!lb||(Date.now()-lb)>week)&&(Date.now()-snz)>week) h+=`<div class="alert closable">
     <button class="x" onclick="hideBackup()" aria-label="Close this message">✕</button>
     You have no backup from the last 7 days.<button class="btn" onclick="exportData()">Download backup</button></div>`;
-  h+=`<div class="daynav"><div><b>${label}</b><span>${['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][base.getDay()]}, ${base.getDate()} ${MN[base.getMonth()]}</span></div>
-    <button onclick="moveDay(-1)" aria-label="Previous day">‹</button><button onclick="moveDay(1)" aria-label="Next day">›</button></div>`;
-  h+=dayStrip(dd,da,cons,view.dayOffset===0,show);
-  const warns=ws=>ws.map(w=>`<div class="warn">⚠ ${esc(w)}</div>`).join('');
-  if(show('doc')) h+=`<div class="grouphead"><h2>Doctors</h2></div><div class="tiles">${personTiles('doc',date,dd)}</div>${warns(dd.warn)}`;
-  if(show('asst')) h+=`<div class="grouphead"><h2>Assistants</h2></div><div class="tiles">${personTiles('asst',date,da)}</div>
-    <button class="busypill ${da.busy?'on':''}" onclick="toggleBusy('${date}')">⚡ Busy 1–4 PM: ${da.busy?'Yes':'No'} <span>(tap to ${da.busy?'remove':'add'} a Morning shift)</span></button>${warns(da.warn)}`;
-  if(show('cons')){
-    h+=`<div class="grouphead"><h2>Consultants</h2></div>`;
-    h+=cons.length?`<div class="tiles">${cons.map(c=>`<button class="tile" style="background:${c.absent?'#F6F0EA':'#DCE2EF'};color:${c.absent?'#A8968A':'#272D4E'}" onclick="toggleCons('${date}',${c.i})">
-        <span class="tn">${esc(c.name)}</span><span><span class="ts" style="display:block">${c.absent?'Not coming':'In clinic'}</span><span class="tt" style="display:block">${c.time}</span></span></button>`).join('')}</div>
-        <p class="small" style="margin:8px 2px 0">Tap a consultant to mark the day as not coming.</p>`
-      :`<p class="small" style="margin:0 2px">No consultant comes on ${WD[base.getDay()]}.</p>`;
+  h+=`<div class="dhead"><div><b>${label}</b><span>${sub}</span></div>${off?`<button class="backtoday" onclick="setDay(0)">Back to today</button>`:''}</div>`;
+  // Week strip (Monday to Sunday)
+  const mon=new Date(base); mon.setDate(base.getDate()-((base.getDay()+6)%7));
+  const t0=new Date(); t0.setHours(12,0,0,0);
+  h+=`<div class="week"><button class="wk" onclick="moveDay(-7)" aria-label="Previous week">‹</button>`;
+  for(let k=0;k<7;k++){
+    const d=new Date(mon); d.setDate(mon.getDate()+k);
+    const o=Math.round((d-t0)/864e5);
+    h+=`<button class="wd ${o===off?'on':''} ${o===0?'istoday':''}" onclick="setDay(${o})" aria-label="${FULLWD[d.getDay()]} ${d.getDate()} ${MN[d.getMonth()]}"><small>${WD[d.getDay()]}</small><b>${d.getDate()}</b></button>`;
   }
-  h+=`<button class="btn primary" onclick="shareDay('${date}')">Send this day on WhatsApp</button>`;
-  h+=`<div class="card" style="margin-top:14px"><h2>How to use this site</h2><p class="small">
-    1. At the start of the month, open <b>Off days</b>. Tap the days each person asked for.<br>
-    2. Open <b>Rota</b>. Check the shifts. Tap a cell to change it.<br>
-    3. Tap <b>Share</b> to send the month to the staff group.<br>
-    4. Each day, open <b>Today</b> to see who works when.</p></div>`;
+  h+=`<button class="wk" onclick="moveDay(7)" aria-label="Next week">›</button></div>`;
+  h+=dayChart(date,dd,da,cons,off===0,show,tv);
+  const warns=ws=>ws.map(w=>`<div class="warn">⚠ ${esc(w)}</div>`).join('');
+  if(show('doc')) h+=warns(dd.warn.map(w=>'Doctors: '+w));
+  if(show('asst')) h+=warns(da.warn.map(w=>'Assistants: '+w));
   return h;
 }
-function personTiles(team,date,d){
-  return [0,1,2].map(i=>{
-    const c=d.shifts[i], sh=SH[c];
-    return `<button class="tile ${d.locked[i]?'locked':''}" style="background:${sh.bg};color:${sh.fg}" onclick="openPick('${team}','${date}',${i})" aria-label="${esc(nameOf(team,i))}: ${shLabel(team,c)}">
-      <span class="tn">${esc(nameOf(team,i))}</span>
-      <span><span class="ts" style="display:block">${shLabel(team,c)}</span><span class="tt" style="display:block">${shTime(team,c)}</span></span></button>`;
-  }).join('');
-}
-function dayStrip(dd,da,cons,showNow,show){
+function dayChart(date,dd,da,cons,showNow,show,tv){
   const A=480,B=1230,pc=t=>((t-A)/(B-A)*100).toFixed(2)+'%';
   const nowMin=new Date().getHours()*60+new Date().getMinutes();
-  const overlay=`<div class="line6" style="left:${pc(1080)}"></div>${showNow&&nowMin>=A&&nowMin<=B?`<div class="now" style="left:${pc(nowMin)}"></div>`:''}`;
-  const row=(lab,col,iv,barCol)=>`<div class="srow"><span class="sl" style="color:${col}">${esc(lab)}</span><div class="track">${iv.map(([a,b])=>`<div class="bar" style="left:${pc(a)};width:calc(${pc(b)} - ${pc(a)});background:${barCol}"></div>`).join('')}${overlay}</div></div>`;
-  let h=`<div class="strip" aria-label="Who is in the clinic">`;
-  if(show('doc')) h+=`<div class="grp">Doctors</div>`+[0,1,2].map(i=>row(initials('doc',i),COL.doc[i],SH[dd.shifts[i]].iv,SH[dd.shifts[i]].bar)).join('');
-  if(show('asst')) h+=`<div class="grp">Assistants</div>`+[0,1,2].map(i=>row(initials('asst',i),COL.asst[i],SH[da.shifts[i]].iv,SH[da.shifts[i]].bar)).join('');
-  if(show('cons')&&cons.length) h+=`<div class="grp">Consultants</div>`+cons.map(c=>row('C'+(c.i+1),CONS_COL,c.absent?[]:[[c.start,c.end]],'#94a3b8')).join('');
+  const lines=`<div class="line6" style="left:${pc(1080)}"></div>${showNow&&nowMin>=A&&nowMin<=B?`<div class="now" style="left:${pc(nowMin)}"></div>`:''}`;
+  const track=(segs,offText,offCol)=>{
+    if(!segs.length) return `<div class="trk offtrk"><span class="offt" style="color:${offCol}">${esc(offText)}</span>${lines}</div>`;
+    return `<div class="trk">${segs.map(g=>`<div class="seg" style="left:${pc(g.a)};width:calc(${pc(g.b)} - ${pc(g.a)});background:${g.bg}"></div><span class="segt" style="left:${pc(g.a)};color:${g.fg}">${esc(g.t)}</span>`).join('')}${lines}</div>`;
+  };
+  const shiftSegs=(team,c)=>{
+    const sh=SH[c]; if(!sh.iv.length) return [];
+    const parts=sh.time.split(', ');
+    return sh.iv.map(([a,b],k)=>({a,b,bg:sh.bg,fg:sh.fg,t:k===0?`${sh.label} ${parts[0]}`:(parts[k]||'')}));
+  };
+  const person=(team,d,i)=>{
+    const c=d.shifts[i];
+    return `<button class="crow" onclick="openPick('${team}','${date}',${i})" aria-label="${esc(nameOf(team,i))}: ${shLabel(team,c)} ${shTime(team,c)}">
+      <span class="lb" style="color:${COL[team][i]}">${esc(initials(team,i))}${d.locked[i]?'<i></i>':''}</span>
+      ${track(shiftSegs(team,c),shLabel(team,c),SH[c].fg)}</button>`;
+  };
+  let h=`<div class="chart" aria-label="Who is in the clinic">`;
+  if(show('doc')) h+=`<div class="ghd">Doctors</div>`+[0,1,2].map(i=>person('doc',dd,i)).join('');
+  if(show('asst')) h+=`<div class="ghd">Assistants<button class="busychip ${da.busy?'on':''}" onclick="toggleBusy('${date}')">⚡ Busy 1–4 PM: ${da.busy?'Yes':'No'}</button></div>`+[0,1,2].map(i=>person('asst',da,i)).join('');
+  if(show('cons')){
+    if(cons.length) h+=`<div class="ghd">Consultants</div>`+cons.map(c=>`<button class="crow" onclick="toggleCons('${date}',${c.i})" aria-label="${esc(c.name)}: ${c.absent?'not coming':c.time}">
+      <span class="lb" style="color:${CONS_COL}">${esc(ini3(c.name))}</span>
+      ${c.absent?track([],'Not coming','#A8968A'):track([{a:c.start,b:c.end,bg:'#E3E1EC',fg:'#272D4E',t:c.time}])}</button>`).join('');
+    else if(tv==='cons') h+=`<div class="ghd">Consultants</div><div class="none">No consultant comes on this day.</div>`;
+  }
   h+=`<div class="ticks">${[[480,'8 AM'],[720,'12'],[960,'4 PM'],[1080,'6'],[1230,'8:30']].map(([t,l])=>`<span class="tick" style="left:${pc(t)}">${l}</span>`).join('')}</div>`;
   const at=(shifts,t)=>shifts.filter(s=>SH[s].iv.some(([a,b])=>t>=a&&t<b)).length;
   const pl=(n,w)=>`<b>${n}</b> ${w}${n===1?'':'s'}`;
   const cnt=t=>[show('doc')?pl(at(dd.shifts,t),'doctor'):'',show('asst')?pl(at(da.shifts,t),'assistant'):'',
-    show('cons')?pl(cons.filter(c=>!c.absent&&t>=c.start&&t<c.end).length,'consultant'):''].filter(Boolean).join(', ');
-  h+=`<div class="counts"><span>After 6 PM: ${cnt(1080)}</span><span>1 to 4 PM: ${cnt(840)}</span></div>`;
+    show('cons')&&cons.length?pl(cons.filter(c=>!c.absent&&t>=c.start&&t<c.end).length,'consultant'):''].filter(Boolean).join(', ');
+  h+=`<div class="cnts">After 6 PM: ${cnt(1080)}<br>1 to 4 PM: ${cnt(840)}</div>`;
   return h+`</div>`;
 }
 function toggleCons(date,i){
+  const snap=snapshot();
   const [y,m]=parseIso(date), md=monthData(y,m,true);
   const c=md.cons[date]||{};
   if(c[i]) delete c[i]; else c[i]=true;
   if(Object.keys(c).length) md.cons[date]=c; else delete md.cons[date];
-  save(); keepScroll(render); toast(c[i]?`${db.consultants[i].name} is marked not coming.`:`${db.consultants[i].name} is marked as coming.`);
+  save(); keepScroll(render); toast(c[i]?`${db.consultants[i].name} is marked not coming.`:`${db.consultants[i].name} is marked as coming.`,snap);
 }
 
 /* ---------- Off days planner ---------- */
 function renderPlan(R){
   const team=whoTeam(), sel=whoIdx(), r=R[team], T=todayIso(), CLM=+db.doctors.cl||2;
   const tgt=t=>t==='doc'?(+db.doctors.leaves||4):(+db.settings.offs||5);
-  let h=stepsHtml('plan');
-  h+=`<p class="tip">Choose a person. Then tap the days that person asked for. The site fills the rest of the off days.</p>`;
-  if(team==='doc') h+=`<div class="switch">
-    <button class="${view.planMode==='O'?'on':''}" onclick="view.planMode='O';render()">Mark leave</button>
-    <button class="${view.planMode==='CL'?'on':''}" onclick="view.planMode='CL';render()">Mark casual leave</button></div>`;
+  let h=`<div class="picker"><div class="chips">`;
   teamsShown().forEach(t=>{
-    const rt=R[t], target=tgt(t);
-    if(teamsShown().length>1) h+=`<div class="grp" style="margin:4px 2px 6px">${TEAM[t].label}</div>`;
-    h+=`<div class="whos">${[0,1,2].map(i=>{
-      const s=rt.stats[i], o=t==='doc'?s.leave:s.off, cls=o===target?'ok':'bad';
-      const sub=t==='doc'
-        ?`${s.req} asked, ${o-s.req} auto, ${s.sun} Sunday<br>Casual leave: ${s.cl} of ${CLM} used`
-        :`${s.req} asked, ${o-s.req} auto, ${s.sun} Sunday`;
-      const on=team===t&&sel===i;
-      return `<button class="who ${on?'on':''}" style="--c:${COL[t][i]}" onclick="view.who='${t}:${i}';if('${t}'!=='doc')view.planMode='O';render()">${badge(t,i,32)}
-        <div>${esc(nameOf(t,i))}<small>${sub}</small></div><span class="cnt ${cls}">${o}/${target}</span></button>`;}).join('')}</div>`;
+    [0,1,2].forEach(i=>{
+      const s=R[t].stats[i], o=t==='doc'?s.leave:s.off, bad=o!==tgt(t), on=team===t&&sel===i;
+      h+=`<button class="pchip ${on?'on':''}" style="--c:${COL[t][i]}" onclick="view.who='${t}:${i}';if('${t}'!=='doc')view.planMode='O';keepScroll(render)" aria-label="${esc(nameOf(t,i))}, ${o} of ${tgt(t)} off days">
+        <span>${esc(initials(t,i))}</span><span class="ct ${bad?'bad':''}">${o}/${tgt(t)}</span></button>`;
+    });
   });
-  h+=`<p class="tip" style="margin-top:4px">Calendar for <b style="color:${COL[team][sel]}">${esc(nameOf(team,sel))}</b> and the other ${TEAM[team].label.toLowerCase()}.</p>`;
+  h+=`</div><div class="pline">`;
+  const nm=`<b style="color:${COL[team][sel]}">${esc(nameOf(team,sel))}</b>`;
+  if(team==='doc'){
+    const used=r.stats[sel].cl;
+    h+=`<div class="switch"><button class="${view.planMode==='O'?'on':''}" onclick="view.planMode='O';keepScroll(render)">Leave</button>
+      <button class="${view.planMode==='CL'?'on':''}" onclick="view.planMode='CL';keepScroll(render)">Casual leave ${used}/${CLM}</button></div>`;
+  }else h+=`<div class="txt">Tap the days ${nm} asked for.</div>`;
+  h+=`<button class="qbtn" onclick="planHelp()" aria-label="Help">?</button></div>`;
+  if(team==='doc') h+=`<div class="pline"><div class="txt">Tap the days ${nm} asked for.</div></div>`;
+  h+=`</div>`;
   h+=`<div class="calh">${['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(x=>`<div>${x}</div>`).join('')}</div><div class="cal">`;
   const lead=(r.days[0].dow+6)%7;
   for(let k=0;k<lead;k++) h+=`<div></div>`;
@@ -639,15 +705,26 @@ function renderPlan(R){
       return `<span class="mini ${kind}" style="--c:${COL[team][i]}">${esc(initials(team,i))}${isCL?' CL':''}</span>`;}).join('');
     h+=`<button class="cday ${d.dow===0?'sun':''} ${d.date<T?'past':''} ${d.date===T?'today':''} ${mine?'mine':''}" style="--c:${COL[team][sel]}" onclick="planTap('${d.date}')" aria-label="${d.day} ${MN[r.m-1]}"><b>${d.day}</b>${minis}</button>`;
   });
-  h+=`</div><div class="legend" style="margin-top:10px">
-    <span class="chip" style="background:#fff;border:1px solid var(--line)">Solid: the person asked</span>
-    <span class="chip" style="background:#fff;border:1px dashed #9aa9a5">Dashed: added by the site</span>
-    ${team==='doc'?'<span class="chip" style="background:#fce7f3;color:#9d174d">CL: casual leave</span>':''}</div>`;
-  if(team==='doc') h+=`<p class="small">The Morning doctor has no Sunday duty. The other two doctors take Sundays in turn. A Sunday off counts as a leave day.</p>`;
+  h+=`</div>`;
   const mw=teamsShown().flatMap(t=>R[t].mw);
-  if(mw.length) h+=`<div class="alert"><ul>${mw.map(w=>`<li>${esc(w)}</li>`).join('')}</ul></div>`;
-  h+=`<button class="btn primary" onclick="setTab('rota')">Make the rota</button>`;
+  if(mw.length) h+=`<div class="alert" style="margin-top:12px"><ul>${mw.map(w=>`<li>${esc(w)}</li>`).join('')}</ul></div>`;
   return h;
+}
+function planHelp(){
+  document.getElementById('sheetTitle').innerHTML='<span>How Off days works</span>';
+  document.getElementById('sheetOpts').innerHTML=`<p class="small">
+    1. Tap a name at the top. The count shows off days given and the target.<br>
+    2. Tap a day to add or remove a requested day off. Tap <b>Undo</b> to reverse a wrong tap.<br>
+    3. The site fills the remaining days automatically.<br>
+    4. For doctors, choose <b>Leave</b> or <b>Casual leave</b> before you tap a day.</p>
+    <div class="legend" style="margin-top:12px">
+    <span class="chip" style="background:#fff;border:1px solid var(--line)">Solid: the person asked</span>
+    <span class="chip" style="background:#fff;border:1px dashed #B9AEA4">Dashed: added by the site</span>
+    <span class="chip" style="background:#FEEEED;color:#C2412F">CL: casual leave</span>
+    <span class="chip" style="background:#B9AEA4;color:#fff">Grey: past day</span></div>
+    <p class="small">The Morning doctor has no Sunday duty. The other two doctors take Sundays in turn. A Sunday off counts as a leave day.</p>
+    <button class="btn primary" onclick="closeSheet()">Close</button>`;
+  document.getElementById('sheet').classList.add('show');
 }
 function planTap(date){
   if(date<todayIso()) return toast('This day is in the past.');
@@ -655,8 +732,10 @@ function planTap(date){
   const code=team==='doc'?view.planMode:'O';
   const dow=new Date(y,m-1,dd).getDay();
   if(team==='doc'&&dow===0&&db.doctors.defaults[i]==='DM') return toast(`${nameOf(team,i)} has no Sunday duty.`);
+  const snap=snapshot();
   const c=td.cells[date]||{};
-  if(c[i]===code){ delete c[i]; }
+  const removing=c[i]===code;
+  if(removing){ delete c[i]; }
   else{
     const other=[0,1,2].find(k=>k!==i&&(c[k]==='O'||c[k]==='CL'));
     if(other!==undefined) return toast(`${nameOf(team,other)} already asked for this day. Only 1 person can be off.`);
@@ -669,24 +748,25 @@ function planTap(date){
   delete td.snap[date];
   if(Object.keys(c).length) td.cells[date]=c; else delete td.cells[date];
   save(); keepScroll(render);
+  const what=code==='CL'?'Casual leave':team==='doc'?'Leave':'Day off';
+  toast(`${what} ${removing?'removed':'added'}: ${nameOf(team,i)}, ${dd} ${MN[m-1].slice(0,3)}.`,snap);
 }
 
 /* ---------- Rota ---------- */
 function cellHtml(team,d,i){
   const c=d.shifts[i], s=SH[c];
-  return `<button class="cell ${d.locked[i]?'locked':''}" style="background:${s.bg};color:${s.fg}" onclick="openPick('${team}','${d.date}',${i})"><span class="ini">${esc(initials(team,i))}</span>${shShort(team,c)}<small>${team==='doc'&&c==='O'?'Day off':s.time}</small></button>`;
+  return `<button class="cell ${d.locked[i]?'locked':''}" style="background:${s.bg};color:${s.fg}" onclick="openPick('${team}','${d.date}',${i})" aria-label="${esc(nameOf(team,i))} ${d.day}: ${shLabel(team,c)}"><span class="ini">${esc(initials(team,i))}</span>${shShort(team,c)}</button>`;
 }
 const CODES={doc:['DS','DE','DM','O','CL'],asst:['S','SE','L','O']};
 function renderRota(R){
   const T=todayIso(), teams=teamsShown(), both=teams.length>1;
-  let h=stepsHtml('rota');
+  let h='';
   teams.forEach(t=>{
-    h+=`<div class="legend">${both?`<span class="chip" style="background:none;color:var(--mute);padding-left:0">${TEAM[t].label}</span>`:''}${CODES[t].map(k=>`<span class="chip" style="background:${SH[k].bg};color:${SH[k].fg}">${shLabel(t,k)}${SH[k].iv.length?' '+SH[k].time:''}</span>`).join('')}</div>`;
+    h+=`<div class="legend">${both?`<span class="lt">${TEAM[t].label}</span>`:''}${CODES[t].filter(k=>k!=='O').map(k=>`<span class="chip" style="background:${SH[k].bg};color:${SH[k].fg}">${SH[k].label} ${SH[k].time}</span>`).join('')}</div>`;
   });
+  if(teams.includes('doc')) h+=`<div class="legend"><span class="lt">Consultants</span>${db.consultants.map(c=>`<span class="chip" style="background:#E3E1EC;color:#272D4E">${esc(ini3(c.name))} ${c.days.slice().sort((a,b)=>((a+6)%7)-((b+6)%7)).map(w=>WD[w]).join(' ')} ${fmtRange(+c.start,+c.end)}</span>`).join('')}</div>`;
   const shared=teams.filter(t=>R[t].shared);
-  h+=shared.length
-    ? `<div class="info">You shared the ${shared.map(t=>TEAM[t].label.toLowerCase()).join(' and ')} rota. A change now moves only the days after it.</div>`
-    : `<p class="tip">Tap a cell to change it or swap it. A dot means you set it.${teams.includes('asst')?' Tap ⚡ for a busy 1–4 PM day.':''}${teams.includes('doc')?' Tap a consultant to mark a day as not coming.':''}</p>`;
+  if(shared.length) h+=`<div class="info">Shared. A change now moves only the later days.</div>`;
   const mw=teams.flatMap(t=>R[t].mw);
   const dayWarn=R[teams[0]].days.filter((d,k)=>teams.some(t=>R[t].days[k].warn.length)).length;
   if(mw.length||dayWarn){
@@ -699,23 +779,21 @@ function renderRota(R){
   });
   h+=`</div>`;
   R[teams[0]].days.forEach((d0,k)=>{
+    const cons=teams.includes('doc')?consFor(d0.date):[];
+    const consHtml=cons.length?`<div class="dcons">${cons.map(c=>`<button class="${c.absent?'absent':''}" onclick="toggleCons('${d0.date}',${c.i})" aria-label="${esc(c.name)} ${c.absent?'not coming':c.time}">${esc(ini3(c.name))}</button>`).join('')}</div>`:'';
     h+=`<div class="day ${d0.dow===0?'sun':''} ${d0.date===T?'today':''}" id="d-${d0.date}">`;
     teams.forEach((t,n)=>{
       const d=R[t].days[k];
       h+=`<div class="row ${n?'second':''}">
-        <div class="date">${n===0?`<b>${d.day}</b><span>${WD[d.dow]}</span>`:''}</div>
+        <div class="date">${n===0?`<b>${d.day}</b><span>${WD[d.dow]}</span>${both?'':consHtml}`:(both?consHtml:'')}</div>
         ${[0,1,2].map(i=>cellHtml(t,d,i)).join('')}
         ${t==='asst'?`<button class="busy ${d.busy?'on':''}" onclick="toggleBusy('${d.date}')" aria-label="Busy day">⚡</button>`:(both?'<div></div>':'')}
       </div>`;
-      if(t==='doc'){
-        const cons=consFor(d.date);
-        if(cons.length) h+=`<div class="consline">${cons.map(c=>`<button class="cons ${c.absent?'absent':''}" onclick="toggleCons('${d.date}',${c.i})">${esc(c.name)} ${c.time}</button>`).join('')}</div>`;
-      }
     });
     teams.forEach(t=>{ h+=R[t].days[k].warn.map(w=>`<div class="warn">⚠ ${both?TEAM[t].label+': ':''}${esc(w)}</div>`).join(''); });
     h+=`</div>`;
   });
-  h+=`</div><button class="btn primary" onclick="shareImage()">Share this month</button>`;
+  h+=`</div>`;
   return h;
 }
 
@@ -746,10 +824,11 @@ function renderSummary(R){
   const mw=teams.flatMap(t=>R[t].mw);
   if(mw.length) h+=`<div class="alert"><b>Leave check</b><ul>${mw.map(w=>`<li>${esc(w)}</li>`).join('')}</ul></div>`;
   const who=teams.map(t=>TEAM[t].label.toLowerCase()).join(' and ');
-  h+=`<div class="card"><h2>Rebalance</h2><p class="small">Use this when the staff have not seen the rota yet. The site keeps past days and your set cells. It recalculates the ${who} from today.</p>
-    <button class="btn" onclick="recalcFuture()">Recalculate from today</button></div>
-  <div class="card"><h2>Reset</h2><p class="small">This removes your set cells and requests for the ${who} in ${MN[view.m-1]} from today on. Past days stay.</p>
-    <button class="btn danger" onclick="resetMonth()">Clear changes for this month</button></div>`;
+  h+=`<details class="card more"><summary>More actions</summary>
+    <p class="small" style="margin-top:12px"><b>Recalculate from today.</b> Use this when the staff have not seen the rota yet. The site keeps past days and your set cells. It recalculates the ${who} from today.</p>
+    <button class="btn" onclick="recalcFuture()">Recalculate from today</button>
+    <p class="small" style="margin-top:16px"><b>Clear changes.</b> This removes your set cells and requests for the ${who} in ${MN[view.m-1]} from today on. Past days stay.</p>
+    <button class="btn danger" onclick="resetMonth()">Clear changes for this month</button></details>`;
   return h;
 }
 
@@ -785,6 +864,11 @@ function renderSettings(){
     <button class="btn" onclick="document.getElementById('imp').click()">Restore from backup</button>
     <input type="file" id="imp" accept="application/json,.json" style="display:none" onchange="importData(this)">
   </div>
+  <div class="card"><h2>How to use this site</h2><p class="small">
+    1. At the start of the month, open <b>Off days</b>. Tap a name, then tap the days that person asked for.<br>
+    2. Open <b>Rota</b>. Check the shifts. Tap a cell to change it or swap it.<br>
+    3. Tap <b>Share month</b> to send the month to the staff group.<br>
+    4. Each day, open <b>Today</b> to see who works when. Tap <b>Send day</b> to send it on WhatsApp.</p></div>
   <div class="card"><h2>How the rota works</h2><p class="small">
     <b>Assistants.</b> A normal day has 2 Split and 1 Second. A busy day (⚡) has 1 Split, 1 Second and 1 Morning. Only 1 assistant is off each day. Every Sunday, 1 assistant is off.<br><br>
     <b>Doctors.</b> Each doctor keeps a fixed shift. On a leave day, the other 2 doctors work Split and Second. On Sunday, the Morning doctor has no duty, and 1 of the other 2 doctors works. Casual leave is only added when you mark it.<br><br>
@@ -803,10 +887,11 @@ function setConsTime(i,k,v){const [h,m]=v.split(':').map(Number);if(isNaN(h))ret
 function setSetting(k,v){if(k==='startMonth'&&!/^\d{4}-\d{2}$/.test(v))return;db.settings[k]=v;save();render();}
 
 function toggleBusy(date){
+  const snap=snapshot();
   const msg=beforeEdit('asst',date);
   const [y,m]=parseIso(date), md=monthData(y,m,true);
   if(md.busy[date]) delete md.busy[date]; else md.busy[date]=true;
-  save(); keepScroll(render); toast(msg);
+  save(); keepScroll(render); toast(msg,snap);
 }
 
 function openPick(team,date,i){
@@ -832,19 +917,21 @@ function pick(team,date,i,k){
     if(other!==undefined){ closeSheet(); return toast(`${nameOf(team,other)} is already off on this day.`); }
     if(k==='CL'&&c[i]!=='CL'&&computeMonth(team,y,m).stats[i].cl>=(+db.doctors.cl||2)){ closeSheet(); return toast(`${nameOf(team,i)} already used all casual leave this month.`); }
   }
+  const snap=snapshot();
   const msg=beforeEdit(team,date);
   if(k) c[i]=k; else delete c[i];
   if(Object.keys(c).length) td.cells[date]=c; else delete td.cells[date];
-  save(); closeSheet(); keepScroll(render); toast(msg);
+  save(); closeSheet(); keepScroll(render); toast(msg,snap);
 }
 function swapCells(team,date,i,k){
   const d=dayInfo(team,date);
+  const snap=snapshot();
   const msg=beforeEdit(team,date);
   const [y,m]=parseIso(date), td=teamData(team,y,m,true);
   const c=td.cells[date]||{};
   c[i]=d.shifts[k]; c[k]=d.shifts[i];
   td.cells[date]=c;
-  save(); closeSheet(); keepScroll(render); toast(`${nameOf(team,i)} and ${nameOf(team,k)} swapped. `+msg.replace('Saved. ',''));
+  save(); closeSheet(); keepScroll(render); toast(`${nameOf(team,i)} and ${nameOf(team,k)} swapped. `+msg.replace('Saved. ',''),snap);
 }
 function keepScroll(fn){const y=window.scrollY;fn();window.scrollTo(0,y);}
 
