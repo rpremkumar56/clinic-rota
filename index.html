@@ -48,6 +48,8 @@ h2{font-size:16px;margin:0 0 8px}
 .chip{font-size:12px;padding:4px 9px;border-radius:999px;font-weight:700}
 .tip{font-size:14px;color:var(--mute);margin:0 2px 10px}
 .alert{background:#fdf0ef;border:1px solid #f4c7c3;color:var(--warn);border-radius:12px;padding:10px 12px;font-size:14px;margin-bottom:10px}
+.alert.closable{position:relative;padding-right:44px}
+.alert .x{position:absolute;top:6px;right:6px;width:34px;height:34px;border:0;background:none;color:var(--warn);font-size:18px;border-radius:8px}
 .alert ul{margin:4px 0 0;padding-left:18px}
 .info{background:#e3f1ec;border:1px solid #b7dacd;color:#0b4f4a;border-radius:12px;padding:10px 12px;font-size:14px;margin-bottom:10px}
 .ghead,.row{display:grid;grid-template-columns:44px repeat(3,minmax(0,1fr)) 42px;gap:6px;align-items:center}
@@ -492,6 +494,7 @@ function setFilter(v){
   if(view.tab==='rota') view.scrollToday=true;
   render();
 }
+function hideBackup(){ db.settings.backupHiddenAt=Date.now(); save(); render(); toast('The reminder comes back in 7 days.'); }
 function moveDay(k){view.dayOffset+=k;render();}
 function toast(msg){
   const el=document.getElementById('toast'); el.textContent=msg; el.classList.add('show');
@@ -541,7 +544,10 @@ function renderToday(){
   let h='';
   if(defaultNames('asst')||defaultNames('doc')) h+=`<div class="info"><b>First step:</b> add the names of the doctors and assistants.<button class="btn primary" onclick="setTab('settings')">Add names</button></div>`;
   const lb=db.settings.lastBackup, hasData=Object.values(db.months).some(md=>Object.keys(md.cells||{}).length||Object.keys(md.busy||{}).length||Object.keys((md.doc||{}).cells||{}).length);
-  if(hasData&&(!lb||(Date.now()-lb)>7*864e5)) h+=`<div class="alert">You have no backup from the last 7 days.<button class="btn" onclick="exportData()">Download backup</button></div>`;
+  const snz=db.settings.backupHiddenAt||0, week=7*864e5;
+  if(hasData&&(!lb||(Date.now()-lb)>week)&&(Date.now()-snz)>week) h+=`<div class="alert closable">
+    <button class="x" onclick="hideBackup()" aria-label="Close this message">✕</button>
+    You have no backup from the last 7 days.<button class="btn" onclick="exportData()">Download backup</button></div>`;
   h+=`<div class="daynav"><button onclick="moveDay(-1)" aria-label="Previous day">‹</button>
     <div><b>${label}</b><span>${WD[base.getDay()]}, ${base.getDate()} ${MN[base.getMonth()]}</span></div>
     <button onclick="moveDay(1)" aria-label="Next day">›</button></div>`;
