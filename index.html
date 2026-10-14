@@ -33,6 +33,9 @@ h2{font-size:16px;margin:0 0 8px}
 .switch{display:flex;background:#dbe6e2;border-radius:12px;padding:3px;margin-bottom:12px}
 .switch button{flex:1;border:0;background:none;border-radius:9px;padding:9px 6px;font-size:14px;font-weight:700;color:var(--mute)}
 .switch button.on{background:#fff;color:var(--ink);box-shadow:0 1px 2px rgba(21,48,43,.15)}
+.switch.hdr{background:rgba(255,255,255,.14);margin:10px 0 0}
+.switch.hdr button{color:rgba(255,255,255,.85);padding:8px 4px;font-size:13px}
+.switch.hdr button.on{background:#fff;color:var(--brand)}
 .steps{display:flex;gap:6px;margin-bottom:10px}
 .step{flex:1;text-align:center;font-size:13px;font-weight:700;padding:8px 4px;border-radius:9px;background:#dbe6e2;color:var(--mute);border:0}
 .step.on{background:var(--brand-2);color:#fff}
@@ -161,6 +164,7 @@ input[type=text],input[type=number],input[type=month],input[type=time],select{wi
     <button class="share" id="shareBtn" onclick="shareNow()">Share</button>
     <button class="gear" onclick="setTab('settings')" aria-label="Settings">⚙</button>
   </div>
+  <div class="switch hdr" id="hdrSwitch" role="tablist"></div>
   <div class="month" id="monthNav">
     <button class="icon" onclick="moveMonth(-1)" aria-label="Previous month">‹</button>
     <h1 id="monthTitle"></h1>
@@ -221,7 +225,7 @@ const now=new Date();
 /* ---------- Storage ---------- */
 function defaultDb(){
   return {settings:{clinic:'Dental Clinic',names:['Assistant 1','Assistant 2','Assistant 3'],offs:5,
-          startMonth:ymKey(now.getFullYear(),now.getMonth()+1),lastBackup:null,todayAll:false},months:{}};
+          startMonth:ymKey(now.getFullYear(),now.getMonth()+1),lastBackup:null,todayView:'all'},months:{}};
 }
 function load(){
   try{const s=localStorage.getItem(KEY);if(s){const d=JSON.parse(s);if(d&&d.settings&&d.months)return d;}}catch(e){}
@@ -230,7 +234,7 @@ function load(){
 function migrate(){
   if(!db.doctors) db.doctors=JSON.parse(JSON.stringify(DEF_DOC));
   if(!db.consultants) db.consultants=JSON.parse(JSON.stringify(DEF_CONS));
-  if(db.settings.todayAll===undefined) db.settings.todayAll=false;
+  if(!db.settings.todayView) db.settings.todayView='all';
 }
 let db=load(); migrate();
 function save(){
@@ -485,6 +489,16 @@ function render(){
   document.getElementById('monthNav').style.display=(view.tab==='today'||view.tab==='settings')?'none':'flex';
   document.getElementById('shareBtn').style.display=view.tab==='settings'?'none':'inline-block';
   ['today','plan','rota','summary'].forEach(t=>document.getElementById('tab-'+t).classList.toggle('on',view.tab===t));
+  const hs=document.getElementById('hdrSwitch');
+  if(view.tab==='today'){
+    const tv=db.settings.todayView;
+    hs.innerHTML=[['all','All'],['doc','Doctors'],['asst','Assistants'],['cons','Consultants']].map(([k,l])=>`<button role="tab" aria-selected="${tv===k}" class="${tv===k?'on':''}" onclick="setTodayView('${k}')">${l}</button>`).join('');
+    hs.style.display='flex';
+  }else if(view.tab==='settings'){ hs.style.display='none'; }
+  else{
+    hs.innerHTML=['asst','doc'].map(t=>`<button role="tab" aria-selected="${view.team===t}" class="${view.team===t?'on':''}" onclick="setTeam('${t}')">${TEAM[t].label}</button>`).join('');
+    hs.style.display='flex';
+  }
   const main=document.getElementById('main');
   main.innerHTML=view.tab==='today'?renderToday():view.tab==='plan'?renderPlan(cur):view.tab==='rota'?renderRota(cur):view.tab==='summary'?renderSummary(cur):renderSettings();
   document.documentElement.style.setProperty('--hh',document.getElementById('hdr').offsetHeight+'px');
@@ -505,8 +519,8 @@ const badge=(team,i,size)=>`<span class="badge" style="background:${COL[team][i]
 /* ---------- Today ---------- */
 function renderToday(){
   const base=new Date(); base.setDate(base.getDate()+view.dayOffset);
-  const date=isoOf(base), da=dayInfo('asst',date), dd=dayInfo('doc',date), all=db.settings.todayAll;
-  const cons=consFor(date);
+  const date=isoOf(base), da=dayInfo('asst',date), dd=dayInfo('doc',date), tv=db.settings.todayView;
+  const cons=consFor(date), show=k=>tv==='all'||tv===k;
   const label=view.dayOffset===0?'Today':view.dayOffset===1?'Tomorrow':view.dayOffset===-1?'Yesterday':WD[base.getDay()];
   let h='';
   if(defaultNames('asst')||defaultNames('doc')) h+=`<div class="info"><b>First step:</b> add the names of the doctors and assistants.<button class="btn primary" onclick="setTab('settings')">Add names</button></div>`;
@@ -515,17 +529,12 @@ function renderToday(){
   h+=`<div class="daynav"><button onclick="moveDay(-1)" aria-label="Previous day">‹</button>
     <div><b>${label}</b><span>${WD[base.getDay()]}, ${base.getDate()} ${MN[base.getMonth()]}</span></div>
     <button onclick="moveDay(1)" aria-label="Next day">›</button></div>`;
-  h+=`<div class="switch">
-    <button class="${!all?'on':''}" onclick="setTodayAll(false)">Doctors and assistants</button>
-    <button class="${all?'on':''}" onclick="setTodayAll(true)">All staff</button></div>`;
-  h+=dayStrip(dd,da,all?cons:[],view.dayOffset===0);
-  // Doctors
-  h+=`<div class="plist"><h2>Doctors</h2>${personRows('doc',date,dd)}${dd.warn.length?`<div class="wlist">${dd.warn.map(w=>`<div class="warn">⚠ ${esc(w)}</div>`).join('')}</div>`:''}</div>`;
-  // Assistants
-  h+=`<div class="plist"><h2>Assistants</h2>${personRows('asst',date,da)}
+  h+=dayStrip(dd,da,cons,view.dayOffset===0,show);
+  if(show('doc')) h+=`<div class="plist"><h2>Doctors</h2>${personRows('doc',date,dd)}${dd.warn.length?`<div class="wlist">${dd.warn.map(w=>`<div class="warn">⚠ ${esc(w)}</div>`).join('')}</div>`:''}</div>`;
+  if(show('asst')) h+=`<div class="plist"><h2>Assistants</h2>${personRows('asst',date,da)}
     <button class="busyrow ${da.busy?'on':''}" onclick="toggleBusy('${date}')">⚡ Busy 1–4 PM: ${da.busy?'Yes':'No'}<span class="small"> (tap to ${da.busy?'remove':'add'} a Long morning)</span></button>
     ${da.warn.length?`<div class="wlist">${da.warn.map(w=>`<div class="warn">⚠ ${esc(w)}</div>`).join('')}</div>`:''}</div>`;
-  if(all){
+  if(show('cons')){
     h+=`<div class="plist"><h2>Consultants</h2>${cons.length?cons.map(c=>`<button class="prow" onclick="toggleCons('${date}',${c.i})">
       <span class="badge" style="background:${CONS_COL}">C${c.i+1}</span>
       <span class="pn">${esc(c.name)}<small>Tap to mark ${c.absent?'as coming':'not coming'}</small></span>
@@ -548,23 +557,24 @@ function personRows(team,date,d){
       <span class="pill" style="background:${s.bg};color:${s.fg}">${shLabel(team,c)}<small>${shTime(team,c)}</small></span></button>`;
   }).join('');
 }
-function dayStrip(dd,da,cons,showNow){
+function dayStrip(dd,da,cons,showNow,show){
   const A=480,B=1230,pc=t=>((t-A)/(B-A)*100).toFixed(2)+'%';
   const nowMin=new Date().getHours()*60+new Date().getMinutes();
   const overlay=`<div class="line6" style="left:${pc(1080)}"></div>${showNow&&nowMin>=A&&nowMin<=B?`<div class="now" style="left:${pc(nowMin)}"></div>`:''}`;
   const row=(lab,col,iv,barCol)=>`<div class="srow"><span class="sl" style="color:${col}">${esc(lab)}</span><div class="track">${iv.map(([a,b])=>`<div class="bar" style="left:${pc(a)};width:calc(${pc(b)} - ${pc(a)});background:${barCol}"></div>`).join('')}${overlay}</div></div>`;
   let h=`<div class="strip" aria-label="Who is in the clinic">`;
-  h+=`<div class="grp">Doctors</div>`+[0,1,2].map(i=>row(initials('doc',i),COL.doc[i],SH[dd.shifts[i]].iv,SH[dd.shifts[i]].bar)).join('');
-  h+=`<div class="grp">Assistants</div>`+[0,1,2].map(i=>row(initials('asst',i),COL.asst[i],SH[da.shifts[i]].iv,SH[da.shifts[i]].bar)).join('');
-  if(cons.length) h+=`<div class="grp">Consultants</div>`+cons.map(c=>row('C'+(c.i+1),CONS_COL,c.absent?[]:[[c.start,c.end]],'#94a3b8')).join('');
+  if(show('doc')) h+=`<div class="grp">Doctors</div>`+[0,1,2].map(i=>row(initials('doc',i),COL.doc[i],SH[dd.shifts[i]].iv,SH[dd.shifts[i]].bar)).join('');
+  if(show('asst')) h+=`<div class="grp">Assistants</div>`+[0,1,2].map(i=>row(initials('asst',i),COL.asst[i],SH[da.shifts[i]].iv,SH[da.shifts[i]].bar)).join('');
+  if(show('cons')&&cons.length) h+=`<div class="grp">Consultants</div>`+cons.map(c=>row('C'+(c.i+1),CONS_COL,c.absent?[]:[[c.start,c.end]],'#94a3b8')).join('');
   h+=`<div class="ticks">${[[480,'8 AM'],[720,'12'],[960,'4 PM'],[1080,'6'],[1230,'8:30']].map(([t,l])=>`<span class="tick" style="left:${pc(t)}">${l}</span>`).join('')}</div>`;
   const at=(shifts,t)=>shifts.filter(s=>SH[s].iv.some(([a,b])=>t>=a&&t<b)).length;
   const pl=(n,w)=>`<b>${n}</b> ${w}${n===1?'':'s'}`;
-  h+=`<div class="counts"><span>After 6 PM: ${pl(at(dd.shifts,1080),'doctor')}, ${pl(at(da.shifts,1080),'assistant')}</span>
-    <span>1 to 4 PM: ${pl(at(dd.shifts,840),'doctor')}, ${pl(at(da.shifts,840),'assistant')}</span></div>`;
+  const cnt=t=>[show('doc')?pl(at(dd.shifts,t),'doctor'):'',show('asst')?pl(at(da.shifts,t),'assistant'):'',
+    show('cons')?pl(cons.filter(c=>!c.absent&&t>=c.start&&t<c.end).length,'consultant'):''].filter(Boolean).join(', ');
+  h+=`<div class="counts"><span>After 6 PM: ${cnt(1080)}</span><span>1 to 4 PM: ${cnt(840)}</span></div>`;
   return h+`</div>`;
 }
-function setTodayAll(v){ db.settings.todayAll=v; save(); render(); }
+function setTodayView(v){ db.settings.todayView=v; save(); render(); }
 function toggleCons(date,i){
   const [y,m]=parseIso(date), md=monthData(y,m,true);
   const c=md.cons[date]||{};
@@ -578,7 +588,7 @@ function renderPlan(r){
   const team=r.team, sel=view.who, T=todayIso();
   const target=team==='doc'?(+db.doctors.leaves||4):(+db.settings.offs||5), CLM=+db.doctors.cl||2;
   const offOf=s=>team==='doc'?s.leave:s.off;
-  let h=teamSwitch()+stepsHtml('plan');
+  let h=stepsHtml('plan');
   h+=`<p class="tip">Choose a ${TEAM[team].one}. Then tap the days that person asked for. The site fills the rest of the ${target} ${team==='doc'?'leave':'off'} days.</p>`;
   if(team==='doc') h+=`<div class="switch">
     <button class="${view.planMode==='O'?'on':''}" onclick="view.planMode='O';render()">Mark leave</button>
@@ -641,7 +651,7 @@ function renderRota(r){
   const team=r.team, T=todayIso();
   const dayWarn=r.days.filter(d=>d.warn.length).length;
   const codes=team==='doc'?['DS','DE','DM','O','CL']:['S','SE','L','O'];
-  let h=teamSwitch()+stepsHtml('rota');
+  let h=stepsHtml('rota');
   h+=`<div class="legend">${codes.map(k=>`<span class="chip" style="background:${SH[k].bg};color:${SH[k].fg}">${shLabel(team,k)}${SH[k].iv.length?' '+SH[k].time:''}</span>`).join('')}</div>`;
   h+=r.shared
     ? `<div class="info">You shared this rota on ${new Date(r.shared).getDate()} ${MN[new Date(r.shared).getMonth()].slice(0,3)}. A change now moves only the days after it.</div>`
@@ -670,7 +680,7 @@ function renderRota(r){
 /* ---------- Summary ---------- */
 function renderSummary(r){
   const team=r.team;
-  let h=teamSwitch();
+  let h='';
   if(team==='asst'){
     const OFFS=+db.settings.offs||5;
     h+=`<div class="card"><h2>${MN[r.m-1]} ${r.y}</h2><table>
@@ -834,13 +844,14 @@ function importData(inp){
 function shareNow(){ if(view.tab==='today'){ const b=new Date(); b.setDate(b.getDate()+view.dayOffset); shareDay(isoOf(b)); } else shareImage(); }
 
 function dayText(date){
-  const dd=dayInfo('doc',date), da=dayInfo('asst',date), [y,m,d]=parseIso(date), all=db.settings.todayAll;
-  const L=[`*Duty for ${WD[dd.dow]} ${d} ${MN[m-1].slice(0,3)}*`,'','*Doctors*'];
-  [0,1,2].forEach(i=>{ const c=dd.shifts[i]; L.push(SH[c].iv.length?`${nameOf('doc',i)}: ${shLabel('doc',c)} (${SH[c].time})`:`${nameOf('doc',i)}: ${shLabel('doc',c)}`); });
-  L.push('','*Assistants*');
-  [0,1,2].forEach(i=>{ const c=da.shifts[i]; L.push(c==='O'?`${nameOf('asst',i)}: Off`:`${nameOf('asst',i)}: ${SH[c].label} (${SH[c].time})`); });
-  if(da.busy) L.push('⚡ Busy day');
-  if(all){ const cons=consFor(date); if(cons.length){ L.push('','*Consultants*'); cons.forEach(c=>L.push(`${c.name}: ${c.absent?'Not coming':c.time}`)); } }
+  const dd=dayInfo('doc',date), da=dayInfo('asst',date), [y,m,d]=parseIso(date), tv=db.settings.todayView, show=k=>tv==='all'||tv===k;
+  const L=[`*Duty for ${WD[dd.dow]} ${d} ${MN[m-1].slice(0,3)}*`];
+  if(show('doc')) L.push('','*Doctors*');
+  if(show('doc')) [0,1,2].forEach(i=>{ const c=dd.shifts[i]; L.push(SH[c].iv.length?`${nameOf('doc',i)}: ${shLabel('doc',c)} (${SH[c].time})`:`${nameOf('doc',i)}: ${shLabel('doc',c)}`); });
+  if(show('asst')) L.push('','*Assistants*');
+  if(show('asst')) [0,1,2].forEach(i=>{ const c=da.shifts[i]; L.push(c==='O'?`${nameOf('asst',i)}: Off`:`${nameOf('asst',i)}: ${SH[c].label} (${SH[c].time})`); });
+  if(show('asst')&&da.busy) L.push('⚡ Busy day');
+  if(show('cons')){ const cons=consFor(date); if(cons.length){ L.push('','*Consultants*'); cons.forEach(c=>L.push(`${c.name}: ${c.absent?'Not coming':c.time}`)); } }
   return L.join('\n');
 }
 async function shareDay(date){
