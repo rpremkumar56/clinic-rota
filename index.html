@@ -194,7 +194,7 @@ const SH={
   // Assistants
   S:  {label:'Split',        short:'Split',   time:'8–1, 4–8:30',  iv:[[480,780],[960,1230]], ...BLUE},
   SE: {label:'Second',       short:'Second',  time:'12–8:30',      iv:[[720,1230]],           ...AMBER},
-  L:  {label:'Long morning', short:'Long',    time:'8–5',          iv:[[480,1020]],           ...VIOLET},
+  L:  {label:'Morning',      short:'Morning', time:'8–5',          iv:[[480,1020]],           ...VIOLET},
   // Doctors
   DS: {label:'Split',        short:'Split',   time:'9–1, 4–8:30',  iv:[[540,780],[960,1230]], ...BLUE},
   DE: {label:'Second',       short:'Second',  time:'12:30–8:30',   iv:[[750,1230]],           ...AMBER},
@@ -532,7 +532,7 @@ function renderToday(){
   h+=dayStrip(dd,da,cons,view.dayOffset===0,show);
   if(show('doc')) h+=`<div class="plist"><h2>Doctors</h2>${personRows('doc',date,dd)}${dd.warn.length?`<div class="wlist">${dd.warn.map(w=>`<div class="warn">⚠ ${esc(w)}</div>`).join('')}</div>`:''}</div>`;
   if(show('asst')) h+=`<div class="plist"><h2>Assistants</h2>${personRows('asst',date,da)}
-    <button class="busyrow ${da.busy?'on':''}" onclick="toggleBusy('${date}')">⚡ Busy 1–4 PM: ${da.busy?'Yes':'No'}<span class="small"> (tap to ${da.busy?'remove':'add'} a Long morning)</span></button>
+    <button class="busyrow ${da.busy?'on':''}" onclick="toggleBusy('${date}')">⚡ Busy 1–4 PM: ${da.busy?'Yes':'No'}<span class="small"> (tap to ${da.busy?'remove':'add'} a Morning shift)</span></button>
     ${da.warn.length?`<div class="wlist">${da.warn.map(w=>`<div class="warn">⚠ ${esc(w)}</div>`).join('')}</div>`:''}</div>`;
   if(show('cons')){
     h+=`<div class="plist"><h2>Consultants</h2>${cons.length?cons.map(c=>`<button class="prow" onclick="toggleCons('${date}',${c.i})">
@@ -684,7 +684,7 @@ function renderSummary(r){
   if(team==='asst'){
     const OFFS=+db.settings.offs||5;
     h+=`<div class="card"><h2>${MN[r.m-1]} ${r.y}</h2><table>
-      <tr><th>Assistant</th><th>Off</th><th>Sun off</th><th>Split</th><th>Second</th><th>Long</th></tr>
+      <tr><th>Assistant</th><th>Off</th><th>Sun off</th><th>Split</th><th>Second</th><th>Morn.</th></tr>
       ${r.stats.map((s,i)=>`<tr><td><span style="color:${COL.asst[i]};font-weight:700">${esc(nameOf(team,i))}</span></td><td>${s.off}/${OFFS}</td><td>${s.sun}</td><td>${s.S}</td><td>${s.SE}</td><td>${s.L}</td></tr>`).join('')}
     </table></div>`;
   }else{
@@ -740,7 +740,7 @@ function renderSettings(){
     <input type="file" id="imp" accept="application/json,.json" style="display:none" onchange="importData(this)">
   </div>
   <div class="card"><h2>How the rota works</h2><p class="small">
-    <b>Assistants.</b> A normal day has 2 Split and 1 Second. A busy day (⚡) has 1 Split, 1 Second and 1 Long morning. Only 1 assistant is off each day. Every Sunday, 1 assistant is off.<br><br>
+    <b>Assistants.</b> A normal day has 2 Split and 1 Second. A busy day (⚡) has 1 Split, 1 Second and 1 Morning. Only 1 assistant is off each day. Every Sunday, 1 assistant is off.<br><br>
     <b>Doctors.</b> Each doctor keeps a fixed shift. On a leave day, the other 2 doctors work Split and Second. On Sunday, the Morning doctor has no duty, and 1 of the other 2 doctors works. Casual leave is only added when you mark it.<br><br>
     <b>Changes.</b> Past days never change. Before you share, a change rebalances the month. After you share, a change moves only the later days.</p></div>
   <button class="btn" onclick="setTab('today')">Back to Today</button>`;
@@ -889,7 +889,7 @@ function shareImage(){
   g.fillStyle='#5f726d'; g.font=`17px ${F}`;
   const legend=team==='doc'
     ?'Split: 9 AM–1 PM and 4–8:30 PM   Second: 12:30–8:30 PM   Morning: 10 AM–1 PM'
-    :'Split: 8 AM–1 PM and 4–8:30 PM   Second: 12–8:30 PM   Long morning: 8 AM–5 PM';
+    :'Split: 8 AM–1 PM and 4–8:30 PM   Second: 12–8:30 PM   Morning: 8 AM–5 PM';
   g.fillText(legend,30,top+rowH*n+45);
   g.fillText(team==='doc'?'CL = casual leave':'⚡ = busy day (extra cover 1–4 PM)',30,top+rowH*n+75);
   consNote.forEach((t,k)=>g.fillText(t,30,top+rowH*n+105+k*30));
