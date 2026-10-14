@@ -3,120 +3,154 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0f766e">
+<meta name="theme-color" content="#0b4f4a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <title>Clinic Rota</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f6f7f9;--card:#fff;--ink:#111827;--mute:#6b7280;--line:#e5e7eb;--brand:#0f766e;--warn:#b91c1c;--hh:120px;color-scheme:light}
+:root{
+  --paper:#eef3f1;--card:#ffffff;--ink:#15302b;--mute:#5f726d;--line:#d8e2de;
+  --brand:#0b4f4a;--brand-2:#0f766e;--warn:#b42318;--hh:120px;color-scheme:light
+}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);padding-bottom:84px}
+body{margin:0;font-family:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--paper);color:var(--ink);padding-bottom:86px;font-size:15px;line-height:1.4}
 button{font-family:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible{outline:3px solid #f59e0b;outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
 header{position:sticky;top:0;z-index:5;background:var(--brand);color:#fff;padding:10px 14px;padding-top:max(10px,env(safe-area-inset-top))}
 .top{display:flex;align-items:center;gap:8px}
-.clinic{font-size:15px;font-weight:700;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.share{background:#fff;color:var(--brand);border:0;border-radius:999px;padding:7px 14px;font-weight:700;font-size:13px}
-.gear{background:rgba(255,255,255,.18);border:0;color:#fff;border-radius:999px;width:36px;height:34px;font-size:17px}
+.clinic{font-size:17px;font-weight:700;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.01em}
+.share{background:#fff;color:var(--brand);border:0;border-radius:999px;padding:8px 15px;font-weight:700;font-size:14px}
+.gear{background:rgba(255,255,255,.14);border:0;color:#fff;border-radius:999px;width:38px;height:36px;font-size:17px}
 .month{display:flex;align-items:center;gap:8px;margin-top:8px}
-.month h1{font-size:19px;margin:0;flex:1;text-align:center}
-.icon{background:rgba(255,255,255,.18);border:0;color:#fff;border-radius:10px;width:42px;height:38px;font-size:18px}
+.month h1{font-size:20px;margin:0;flex:1;text-align:center}
+.icon{background:rgba(255,255,255,.14);border:0;color:#fff;border-radius:10px;width:44px;height:40px;font-size:20px}
 main{padding:12px;max-width:640px;margin:0 auto}
+h2{font-size:16px;margin:0 0 8px}
+.switch{display:flex;background:#dbe6e2;border-radius:12px;padding:3px;margin-bottom:12px}
+.switch button{flex:1;border:0;background:none;border-radius:9px;padding:9px 6px;font-size:14px;font-weight:700;color:var(--mute)}
+.switch button.on{background:#fff;color:var(--ink);box-shadow:0 1px 2px rgba(21,48,43,.15)}
 .steps{display:flex;gap:6px;margin-bottom:10px}
-.step{flex:1;text-align:center;font-size:12px;font-weight:600;padding:7px 4px;border-radius:9px;background:#e5e7eb;color:var(--mute);border:0}
-.step.on{background:var(--brand);color:#fff}
+.step{flex:1;text-align:center;font-size:13px;font-weight:700;padding:8px 4px;border-radius:9px;background:#dbe6e2;color:var(--mute);border:0}
+.step.on{background:var(--brand-2);color:#fff}
 .legend{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
-.chip{font-size:12px;padding:4px 9px;border-radius:999px;font-weight:600}
-.tip{font-size:13px;color:var(--mute);margin:0 2px 10px;line-height:1.4}
-.alert{background:#fef2f2;border:1px solid #fecaca;color:var(--warn);border-radius:12px;padding:10px 12px;font-size:13px;margin-bottom:10px}
+.chip{font-size:12px;padding:4px 9px;border-radius:999px;font-weight:700}
+.tip{font-size:14px;color:var(--mute);margin:0 2px 10px}
+.alert{background:#fdf0ef;border:1px solid #f4c7c3;color:var(--warn);border-radius:12px;padding:10px 12px;font-size:14px;margin-bottom:10px}
 .alert ul{margin:4px 0 0;padding-left:18px}
-.info{background:#ecfdf5;border:1px solid #a7f3d0;color:#065f46;border-radius:12px;padding:10px 12px;font-size:13px;margin-bottom:10px;line-height:1.4}
+.info{background:#e3f1ec;border:1px solid #b7dacd;color:#0b4f4a;border-radius:12px;padding:10px 12px;font-size:14px;margin-bottom:10px}
 .ghead,.row{display:grid;grid-template-columns:44px repeat(3,minmax(0,1fr)) 42px;gap:6px;align-items:center}
-.ghead{position:sticky;top:var(--hh);z-index:4;background:var(--bg);padding:8px 7px 6px;margin:0 -2px}
+.doc .ghead,.doc .row{grid-template-columns:44px repeat(3,minmax(0,1fr))}
+.ghead{position:sticky;top:var(--hh);z-index:4;background:var(--paper);padding:8px 7px 6px;margin:0 -2px}
 .ghead div{font-size:12px;font-weight:700;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;border-radius:8px;padding:5px 2px;color:#fff}
-.ghead div:first-child,.ghead div:last-child{color:var(--mute);background:none}
-.day{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:6px;margin-bottom:6px;scroll-margin-top:calc(var(--hh) + 50px)}
-.day.sun{background:#f0fdfa}
-.day.today{border-color:var(--brand);box-shadow:0 0 0 1px var(--brand)}
+.ghead div.plain{color:var(--mute);background:none}
+.day{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:6px;margin-bottom:6px;scroll-margin-top:calc(var(--hh) + 52px)}
+.day.sun{background:#f2f8f6}
+.day.today{border-color:var(--brand-2);box-shadow:0 0 0 1px var(--brand-2)}
 .date{text-align:center;line-height:1.1}
-.date b{font-size:17px;display:block}
+.date b{font-size:18px;display:block}
 .date span{font-size:11px;color:var(--mute)}
 .cell{border:0;border-radius:9px;height:46px;font-size:13px;font-weight:700;position:relative;width:100%;padding:0 2px}
-.cell small{display:block;font-size:10px;font-weight:500;opacity:.85;margin-top:1px}
+.cell small{display:block;font-size:10px;font-weight:400;opacity:.9;margin-top:1px}
 .cell .ini{position:absolute;top:3px;left:5px;font-size:9px;font-weight:700;opacity:.7}
 .cell.locked::after{content:"";position:absolute;top:5px;right:6px;width:7px;height:7px;border-radius:50%;background:currentColor}
 .busy{border:1px solid var(--line);background:#fff;border-radius:9px;height:46px;font-size:18px;filter:grayscale(1);opacity:.45;padding:0}
 .busy.on{filter:none;opacity:1;background:#fff7ed;border-color:#fdba74}
+.consline{display:flex;flex-wrap:wrap;gap:5px;margin:6px 2px 1px 50px}
+.cons{border:1px solid #c9d6d1;background:#f4f8f6;border-radius:8px;padding:4px 8px;font-size:12px;font-weight:700;color:#334e48}
+.cons.absent{text-decoration:line-through;color:#9aa9a5;background:#fff;border-style:dashed}
 .warn{color:var(--warn);font-size:12px;margin:5px 4px 1px}
 nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:#fff;border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom);z-index:6}
 nav button{flex:1;border:0;background:none;padding:9px 0 11px;font-size:12px;color:var(--mute)}
 nav button b{display:block;font-size:19px;font-weight:400;margin-bottom:1px}
 nav button.on{color:var(--brand);font-weight:700}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
-.card h2{font-size:15px;margin:0 0 10px}
-table{width:100%;border-collapse:collapse;font-size:13px}
+table{width:100%;border-collapse:collapse;font-size:14px}
 th,td{padding:8px 4px;border-bottom:1px solid var(--line);text-align:center}
 th:first-child,td:first-child{text-align:left}
-th{color:var(--mute);font-weight:600;font-size:12px}
+th{color:var(--mute);font-weight:700;font-size:12px}
 label{display:block;font-size:13px;color:var(--mute);margin:10px 0 4px}
-input[type=text],input[type=number],input[type=month]{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font-size:16px;font-family:inherit;background:#fff;color:var(--ink)}
+input[type=text],input[type=number],input[type=month],input[type=time],select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font-size:16px;font-family:inherit;background:#fff;color:var(--ink)}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pair label{margin-top:6px}
+.daychips{display:flex;gap:4px;flex-wrap:wrap}
+.daychips button{border:1px solid var(--line);background:#fff;border-radius:8px;padding:7px 9px;font-size:13px;font-weight:700;color:var(--mute)}
+.daychips button.on{background:var(--brand-2);border-color:var(--brand-2);color:#fff}
+.sep{border:0;border-top:1px solid var(--line);margin:14px 0 4px}
 .btn{display:block;width:100%;padding:13px;border-radius:12px;border:1px solid var(--line);background:#fff;font-size:15px;font-weight:700;margin-top:10px;text-align:center}
 .btn.primary{background:var(--brand);color:#fff;border-color:var(--brand)}
-.btn.danger{color:var(--warn);border-color:#fecaca}
-.small{font-size:12px;color:var(--mute);line-height:1.5}
-.badge{width:36px;height:36px;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex:none}
+.btn.danger{color:var(--warn);border-color:#f4c7c3}
+.small{font-size:13px;color:var(--mute);line-height:1.5}
+.badge{width:34px;height:34px;border-radius:50%;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex:none}
 /* Today */
-.daynav{display:flex;align-items:center;gap:8px;margin-bottom:12px}
-.daynav button{border:1px solid var(--line);background:#fff;border-radius:10px;width:44px;height:44px;font-size:20px}
+.daynav{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.daynav button{border:1px solid var(--line);background:#fff;border-radius:10px;width:46px;height:46px;font-size:20px}
 .daynav div{flex:1;text-align:center}
-.daynav b{display:block;font-size:20px}
-.daynav span{font-size:13px;color:var(--mute)}
-.pcard{display:grid;grid-template-columns:40px 1fr auto;gap:10px;align-items:center;width:100%;background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:8px;text-align:left}
+.daynav b{display:block;font-size:24px;line-height:1.1}
+.daynav span{font-size:14px;color:var(--mute)}
+.strip{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 12px 8px;margin-bottom:12px}
+.grp{font-size:12px;font-weight:700;color:var(--mute);margin:8px 0 2px}
+.grp:first-child{margin-top:0}
+.srow{display:grid;grid-template-columns:30px 1fr;gap:8px;align-items:center;margin:5px 0}
+.srow .sl{font-size:11px;font-weight:700}
+.track{position:relative;height:18px;background:#eef3f1;border-radius:5px;overflow:hidden}
+.bar{position:absolute;top:2px;bottom:2px;border-radius:4px}
+.line6{position:absolute;top:0;bottom:0;border-left:2px dashed #e49b94}
+.now{position:absolute;top:-2px;bottom:-2px;border-left:2px solid var(--warn)}
+.ticks{position:relative;height:18px;margin-left:38px;margin-top:4px}
+.tick{position:absolute;font-size:11px;color:var(--mute);transform:translateX(-50%);white-space:nowrap}
+.tick:first-child{transform:none}
+.tick:last-child{transform:translateX(-100%)}
+.counts{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.counts span{font-size:13px;background:#eef3f1;border-radius:8px;padding:4px 8px}
+.counts b{font-size:14px}
+.plist{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-bottom:12px}
+.plist h2{padding:12px 14px 4px;margin:0}
+.prow{display:grid;grid-template-columns:36px 1fr auto;gap:10px;align-items:center;width:100%;background:none;border:0;border-top:1px solid var(--line);padding:10px 12px;text-align:left}
+.plist h2+.prow{border-top:0}
 .pn{font-size:16px;font-weight:700}
-.pn small{display:block;font-size:12px;font-weight:500;color:var(--mute)}
-.ps{border-radius:10px;padding:8px 10px;font-weight:700;text-align:center;min-width:112px;font-size:15px}
-.ps small{display:block;font-size:11px;font-weight:500}
-.busyrow{width:100%;border:1px solid var(--line);background:#fff;border-radius:12px;padding:12px;font-size:14px;font-weight:600;text-align:left}
-.busyrow.on{background:#fff7ed;border-color:#fdba74;color:#9a3412}
-.tl{position:relative;margin-top:6px}
-.tlrow{display:grid;grid-template-columns:30px 1fr;gap:8px;align-items:center;margin:7px 0}
-.tlrow span{font-size:11px;font-weight:700;color:var(--mute)}
-.track{position:relative;height:16px;background:#f3f4f6;border-radius:6px;overflow:hidden}
-.seg{position:absolute;top:0;bottom:0;border-radius:5px}
-.ticks{position:relative;height:16px;margin-left:38px}
-.tick{position:absolute;font-size:10px;color:var(--mute);transform:translateX(-50%);white-space:nowrap}
-.eve{position:absolute;top:0;bottom:0;width:0;border-left:2px dashed #fca5a5}
-/* Off days planner */
+.pn small{display:block;font-size:12px;font-weight:400;color:var(--mute)}
+.pill{border-radius:10px;padding:7px 10px;font-weight:700;text-align:center;min-width:118px;font-size:14px}
+.pill small{display:block;font-size:11px;font-weight:400}
+.busyrow{width:100%;border:0;border-top:1px solid var(--line);background:#fff;padding:12px 14px;font-size:14px;font-weight:700;text-align:left}
+.busyrow.on{background:#fff7ed;color:#9a3412}
+.wlist{padding:0 14px 10px}
+/* Planner */
 .whos{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
 .who{display:flex;align-items:center;gap:10px;border:2px solid var(--line);border-radius:12px;padding:8px 10px;background:#fff;text-align:left;font-size:15px;font-weight:700}
 .who.on{border-color:var(--c);box-shadow:0 0 0 1px var(--c)}
-.who small{display:block;font-size:12px;color:var(--mute);font-weight:500}
-.who .cnt{margin-left:auto;font-size:13px;font-weight:700;padding:4px 8px;border-radius:8px;background:#f3f4f6}
+.who small{display:block;font-size:12px;color:var(--mute);font-weight:400}
+.who .cnt{margin-left:auto;font-size:13px;font-weight:700;padding:4px 8px;border-radius:8px;background:#eef3f1}
 .who .cnt.ok{background:#dcfce7;color:#166534}
 .who .cnt.bad{background:#fee2e2;color:#991b1b}
 .calh,.cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
 .calh div{font-size:11px;text-align:center;color:var(--mute);font-weight:700;padding-bottom:2px}
-.cday{min-height:58px;border:1px solid var(--line);border-radius:10px;background:#fff;padding:4px 2px;display:flex;flex-direction:column;align-items:center;gap:3px}
-.cday b{font-size:14px}
-.cday.sun b{color:#b91c1c}
+.cday{min-height:60px;border:1px solid var(--line);border-radius:10px;background:#fff;padding:4px 2px;display:flex;flex-direction:column;align-items:center;gap:3px}
+.cday b{font-size:15px}
+.cday.sun b{color:var(--warn)}
 .cday.past{opacity:.45}
-.cday.today{outline:2px solid var(--brand)}
-.mini{font-size:9px;font-weight:800;border-radius:5px;padding:1px 3px;background:var(--c);color:#fff;border:1.5px solid var(--c)}
+.cday.today{outline:2px solid var(--brand-2)}
+.mini{font-size:9px;font-weight:700;border-radius:5px;padding:1px 3px;background:var(--c);color:#fff;border:1.5px solid var(--c)}
 .mini.auto{background:#fff;color:var(--c);border-style:dashed}
-.mini.fixed{background:#9ca3af;border-color:#9ca3af}
+.mini.fixed{background:#9aa9a5;border-color:#9aa9a5}
+.mini.cl{background:#fce7f3;color:#9d174d;border-color:#f472b6}
 .cday.mine{background:var(--c);border-color:var(--c);color:#fff}
 .cday.mine b{color:#fff}
 .cday.mine .mini{border-color:#fff}
 /* Sheet + toast */
 .sheet{position:fixed;inset:0;z-index:20;display:none}
 .sheet.show{display:block}
-.sheet-bg{position:absolute;inset:0;background:rgba(0,0,0,.35)}
-.sheet-card{position:absolute;left:0;right:0;bottom:0;background:#fff;border-radius:18px 18px 0 0;padding:16px 14px;padding-bottom:max(16px,env(safe-area-inset-bottom));max-width:640px;margin:0 auto;max-height:85vh;overflow:auto}
-.sheet-title{font-weight:700;font-size:16px;margin-bottom:10px}
-.opt{display:flex;align-items:center;justify-content:space-between;width:100%;border:1px solid var(--line);border-radius:12px;padding:13px 14px;margin-bottom:8px;font-size:15px;font-weight:600;background:#fff}
-.opt span{font-size:12px;font-weight:500;color:var(--mute)}
-.opt.sel{outline:2px solid var(--brand)}
-.sub{font-size:12px;font-weight:700;color:var(--mute);margin:12px 2px 6px;text-transform:uppercase;letter-spacing:.04em}
-#toast{position:fixed;left:50%;bottom:92px;transform:translateX(-50%);background:#111827;color:#fff;padding:10px 16px;border-radius:12px;font-size:14px;z-index:30;opacity:0;transition:opacity .2s;pointer-events:none;max-width:90vw;text-align:center}
+.sheet-bg{position:absolute;inset:0;background:rgba(21,48,43,.4)}
+.sheet-card{position:absolute;left:0;right:0;bottom:0;background:#fff;border-radius:18px 18px 0 0;padding:16px 14px;padding-bottom:max(16px,env(safe-area-inset-bottom));max-width:640px;margin:0 auto;max-height:86vh;overflow:auto}
+.sheet-title{font-weight:700;font-size:17px;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.opt{display:flex;align-items:center;justify-content:space-between;width:100%;border:1px solid var(--line);border-radius:12px;padding:13px 14px;margin-bottom:8px;font-size:15px;font-weight:700;background:#fff}
+.opt span{font-size:13px;font-weight:400;color:var(--mute)}
+.opt.sel{outline:2px solid var(--brand-2)}
+.sub{font-size:13px;font-weight:700;color:var(--mute);margin:12px 2px 6px}
+#toast{position:fixed;left:50%;bottom:94px;transform:translateX(-50%);background:#15302b;color:#fff;padding:10px 16px;border-radius:12px;font-size:14px;z-index:30;opacity:0;transition:opacity .2s;pointer-events:none;max-width:90vw;text-align:center}
 #toast.show{opacity:1}
 </style>
 </head>
@@ -124,7 +158,7 @@ input[type=text],input[type=number],input[type=month]{width:100%;padding:10px 12
 <header id="hdr">
   <div class="top">
     <div class="clinic" id="clinicName"></div>
-    <button class="share" id="shareBtn" onclick="shareNow()">Share ↗</button>
+    <button class="share" id="shareBtn" onclick="shareNow()">Share</button>
     <button class="gear" onclick="setTab('settings')" aria-label="Settings">⚙</button>
   </div>
   <div class="month" id="monthNav">
@@ -142,86 +176,136 @@ input[type=text],input[type=number],input[type=month]{width:100%;padding:10px 12
 </nav>
 <div class="sheet" id="sheet">
   <div class="sheet-bg" onclick="closeSheet()"></div>
-  <div class="sheet-card"><div class="sheet-title" id="sheetTitle"></div><div id="sheetOpts"></div></div>
+  <div class="sheet-card" role="dialog" aria-modal="true"><div class="sheet-title" id="sheetTitle"></div><div id="sheetOpts"></div></div>
 </div>
-<div id="toast"></div>
+<div id="toast" role="status"></div>
 
 <script>
 /* ---------- Constants ---------- */
 const KEY='clinicRota.v1';
 const WD=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const MN=['January','February','March','April','May','June','July','August','September','October','November','December'];
+const BLUE={fg:'#1d4ed8',bg:'#dbeafe',bar:'#60a5fa'}, AMBER={fg:'#92400e',bg:'#fef3c7',bar:'#f59e0b'}, VIOLET={fg:'#6d28d9',bg:'#ede9fe',bar:'#a78bfa'}, GREY={fg:'#4b5563',bg:'#e5e7eb',bar:'#e5e7eb'};
 const SH={
-  S:  {label:'Split',        short:'Split',  time:'8–1, 4–8:30', iv:[[480,780],[960,1230]], fg:'#1d4ed8', bg:'#dbeafe', bar:'#60a5fa'},
-  SE: {label:'Second',       short:'Second', time:'12–8:30',     iv:[[720,1230]],           fg:'#92400e', bg:'#fef3c7', bar:'#f59e0b'},
-  L:  {label:'Long morning', short:'Long',   time:'8–5',         iv:[[480,1020]],           fg:'#6d28d9', bg:'#ede9fe', bar:'#a78bfa'},
-  O:  {label:'Off',          short:'Off',    time:'Day off',     iv:[],                     fg:'#4b5563', bg:'#e5e7eb', bar:'#e5e7eb'}
+  // Assistants
+  S:  {label:'Split',        short:'Split',   time:'8–1, 4–8:30',  iv:[[480,780],[960,1230]], ...BLUE},
+  SE: {label:'Second',       short:'Second',  time:'12–8:30',      iv:[[720,1230]],           ...AMBER},
+  L:  {label:'Long morning', short:'Long',    time:'8–5',          iv:[[480,1020]],           ...VIOLET},
+  // Doctors
+  DS: {label:'Split',        short:'Split',   time:'9–1, 4–8:30',  iv:[[540,780],[960,1230]], ...BLUE},
+  DE: {label:'Second',       short:'Second',  time:'12:30–8:30',   iv:[[750,1230]],           ...AMBER},
+  DM: {label:'Morning',      short:'Morning', time:'10–1',         iv:[[600,780]],            ...VIOLET},
+  CL: {label:'Casual leave', short:'CL',      time:'Casual leave', iv:[], fg:'#9d174d', bg:'#fce7f3', bar:'#fce7f3'},
+  X:  {label:'No Sunday duty',short:'Sun off',time:'Not on Sundays',iv:[], fg:'#8a9a96', bg:'#f1f5f3', bar:'#f1f5f3'},
+  // Shared
+  O:  {label:'Off',          short:'Off',     time:'Day off',      iv:[], ...GREY}
 };
-const AC=['#0f766e','#db2777','#4f46e5'];   // one colour per assistant
+const COL={asst:['#0f766e','#db2777','#4f46e5'], doc:['#a16207','#1e5a8a','#be123c']};
+const CONS_COL='#475569';
+const TEAM={asst:{label:'Assistants',one:'assistant'}, doc:{label:'Doctors',one:'doctor'}};
+const DEF_DOC={names:['Doctor 1','Doctor 2','Doctor 3'],defaults:['DS','DE','DM'],leaves:4,cl:2};
+const DEF_CONS=[{name:'Consultant 1',days:[2,4],start:900,end:1080},{name:'Consultant 2',days:[1,3,5],start:960,end:1140}];
+
 const pad=n=>String(n).padStart(2,'0');
 const ymKey=(y,m)=>`${y}-${pad(m)}`;
 const isoOf=dt=>`${dt.getFullYear()}-${pad(dt.getMonth()+1)}-${pad(dt.getDate())}`;
 const todayIso=()=>isoOf(new Date());
 const parseIso=s=>s.split('-').map(Number);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const fmt=t=>{const h=Math.floor(t/60),mm=t%60,h12=h>12?h-12:h;return h12+(mm?':'+pad(mm):'')+(h>=12?' PM':' AM');};
+const fmt=t=>{const h=Math.floor(t/60),mm=t%60,h12=h>12?h-12:(h===0?12:h);return h12+(mm?':'+pad(mm):'')+(h>=12?' PM':' AM');};
+const fmtRange=(a,b)=>{const f=t=>{const h=Math.floor(t/60),mm=t%60,h12=h>12?h-12:(h===0?12:h);return h12+(mm?':'+pad(mm):'');};
+  const ap=t=>t>=720?'PM':'AM'; return ap(a)===ap(b)?`${f(a)}–${f(b)} ${ap(b)}`:`${f(a)} ${ap(a)}–${f(b)} ${ap(b)}`;};
+const toHHMM=t=>`${pad(Math.floor(t/60))}:${pad(t%60)}`;
 const now=new Date();
 
 /* ---------- Storage ---------- */
 function defaultDb(){
   return {settings:{clinic:'Dental Clinic',names:['Assistant 1','Assistant 2','Assistant 3'],offs:5,
-          startMonth:ymKey(now.getFullYear(),now.getMonth()+1),lastBackup:null},months:{}};
+          startMonth:ymKey(now.getFullYear(),now.getMonth()+1),lastBackup:null,todayAll:false},months:{}};
 }
 function load(){
   try{const s=localStorage.getItem(KEY);if(s){const d=JSON.parse(s);if(d&&d.settings&&d.months)return d;}}catch(e){}
   return defaultDb();
 }
-let db=load();
+function migrate(){
+  if(!db.doctors) db.doctors=JSON.parse(JSON.stringify(DEF_DOC));
+  if(!db.consultants) db.consultants=JSON.parse(JSON.stringify(DEF_CONS));
+  if(db.settings.todayAll===undefined) db.settings.todayAll=false;
+}
+let db=load(); migrate();
 function save(){
   try{localStorage.setItem(KEY,JSON.stringify(db));}
   catch(e){alert('This phone could not save the data. Please use Backup in Settings.');}
 }
 function monthData(y,m,create){
   const k=ymKey(y,m);
-  if(!db.months[k]){ if(!create) return {cells:{},busy:{},snap:{}}; db.months[k]={cells:{},busy:{},snap:{}}; }
-  const md=db.months[k]; md.cells=md.cells||{}; md.busy=md.busy||{}; md.snap=md.snap||{};
+  if(!db.months[k]){ if(!create) return {cells:{},busy:{},snap:{},doc:{cells:{},snap:{}},cons:{}}; db.months[k]={cells:{},busy:{},snap:{}}; }
+  const md=db.months[k]; md.cells=md.cells||{}; md.busy=md.busy||{}; md.snap=md.snap||{}; md.cons=md.cons||{};
+  md.doc=md.doc||{cells:{},snap:{}}; md.doc.cells=md.doc.cells||{}; md.doc.snap=md.doc.snap||{};
   return md;
 }
-const nameOf=i=>db.settings.names[i]||`Assistant ${i+1}`;
-const defaultNames=()=>db.settings.names.every((n,i)=>n===`Assistant ${i+1}`);
-function initials(i){
-  const n=nameOf(i).trim(), p=n.split(/\s+/);
-  return (p.length>1 ? p[0][0]+p[1][0] : n.slice(0,2)).toUpperCase();
+const teamData=(team,y,m,create)=>{const md=monthData(y,m,create);return team==='doc'?md.doc:md;};
+const namesOf=team=>team==='doc'?db.doctors.names:db.settings.names;
+const nameOf=(team,i)=>namesOf(team)[i]||`${team==='doc'?'Doctor':'Assistant'} ${i+1}`;
+const defaultNames=team=>namesOf(team).every((n,i)=>n===`${team==='doc'?'Doctor':'Assistant'} ${i+1}`);
+function initials(team,i){
+  const n=nameOf(team,i).replace(/^dr\.?\s+/i,'').trim(), p=n.split(/\s+/);
+  return (p.length>1?p[0][0]+p[1][0]:n.slice(0,2)).toUpperCase();
 }
+const shLabel=(team,c)=>team==='doc'&&c==='O'?'Leave':SH[c].label;
+const shShort=(team,c)=>team==='doc'&&c==='O'?'Leave':SH[c].short;
+const shTime=(team,c)=>team==='doc'&&c==='O'?'On leave':SH[c].time;
 
-/* ---------- Rota logic ---------- */
-function coverage(shifts){
+/* ---------- Shared logic ---------- */
+function coverage(shifts,from,to,skip){
   const c=[];
-  for(let t=480;t<1230;t+=30){
+  for(let t=from;t<to;t+=30){
+    if(skip&&t>=skip[0]&&t<skip[1]) continue;
     let n=0;
     shifts.forEach(s=>{ if(s&&SH[s].iv.some(([a,b])=>t>=a&&t<b)) n++; });
     c.push([t,n]);
   }
   return c;
 }
-
-function generate(y,m,carry){
-  const md=monthData(y,m,false), OFFS=Math.max(0,+db.settings.offs||5);
-  const n=new Date(y,m,0).getDate();
-  const days=[];
+function baseDays(td,y,m){
+  const n=new Date(y,m,0).getDate(), days=[];
   for(let d=1;d<=n;d++){
     const date=`${y}-${pad(m)}-${pad(d)}`;
-    const cells=md.cells[date]||{}, snap=md.snap[date];
-    const ov=Object.assign({}, snap?{0:snap[0],1:snap[1],2:snap[2]}:{}, cells);  // user locks win over a frozen day
-    days.push({day:d,date,dow:new Date(y,m-1,d).getDay(),ov,cells,frozen:!!snap,busy:!!md.busy[date],off:[],shifts:[],locked:[],warn:[]});
+    const cells=td.cells[date]||{}, snap=td.snap[date];
+    const ov=Object.assign({}, snap?{0:snap[0],1:snap[1],2:snap[2]}:{}, cells);   // user cells win over a frozen day
+    days.push({day:d,date,dow:new Date(y,m-1,d).getDay(),ov,cells,frozen:!!snap,off:[],shifts:[],locked:[],warn:[]});
   }
-  const rot=(i,d)=>((i-d.day)%3+3)%3;
+  return days;
+}
+const rot=(i,d)=>((i-d.day)%3+3)%3;
+// Spread the remaining off days over weekdays, max 1 off per day
+function fillOffs(days,count,target,skipDay){
+  for(let guard=0;guard<300;guard++){
+    const need=[0,1,2].filter(i=>count[i]<target).sort((a,b)=>count[a]-count[b]||a-b);
+    if(!need.length) break;
+    let placed=false;
+    for(const i of need){
+      const own=days.filter(d=>d.off.includes(i)).map(d=>d.day);
+      let best=null,bs=-Infinity;
+      days.forEach(d=>{
+        if(d.dow===0||d.off.length||d.ov[i]||(skipDay&&skipDay(d))) return;
+        let s=(own.length?Math.min(...own.map(x=>Math.abs(x-d.day))):40)*10-Math.abs(d.day-(2+i*3))*0.1;
+        if(d.busy) s-=1000;
+        if(s>bs){bs=s;best=d;}
+      });
+      if(best){best.off.push(i);count[i]++;placed=true;break;}
+    }
+    if(!placed) break;
+  }
+}
+
+/* ---------- Assistants ---------- */
+function generateAsst(y,m,carry){
+  const md=teamData('asst',y,m,false), OFFS=Math.max(0,+db.settings.offs||5);
+  const days=baseDays(md,y,m);
+  days.forEach(d=>d.busy=!!md.busy[d.date]);
   const offCount=[0,0,0], sun=[0,0,0];
-
-  // 1. Fixed offs (requested by the user, or on a frozen day)
   days.forEach(d=>{ for(let i=0;i<3;i++) if(d.ov[i]==='O'){ d.off.push(i); offCount[i]++; if(d.dow===0) sun[i]++; } });
-
-  // 2. Sunday offs: lowest Sunday balance (includes carry from earlier months)
   days.forEach(d=>{
     if(d.dow!==0||d.off.length) return;
     const c=[0,1,2].filter(i=>!d.ov[i]&&offCount[i]<OFFS);
@@ -229,27 +313,8 @@ function generate(y,m,carry){
     c.sort((a,b)=>(carry[a]+sun[a])-(carry[b]+sun[b])||offCount[a]-offCount[b]||rot(a,d)-rot(b,d));
     const i=c[0]; d.off.push(i); offCount[i]++; sun[i]++;
   });
+  fillOffs(days,offCount,OFFS,d=>Object.values(d.ov).includes('L'));
 
-  // 3. Remaining offs: spread out, weekdays only, max 1 off per day, avoid busy days
-  for(let guard=0;guard<300;guard++){
-    const need=[0,1,2].filter(i=>offCount[i]<OFFS).sort((a,b)=>offCount[a]-offCount[b]||a-b);
-    if(!need.length) break;
-    let placed=false;
-    for(const i of need){
-      const own=days.filter(d=>d.off.includes(i)).map(d=>d.day);
-      let best=null,bs=-Infinity;
-      days.forEach(d=>{
-        if(d.dow===0||d.off.length||d.ov[i]||Object.values(d.ov).includes('L')) return;
-        let s=(own.length?Math.min(...own.map(x=>Math.abs(x-d.day))):40)*10-Math.abs(d.day-(2+i*3))*0.1;
-        if(d.busy) s-=1000;
-        if(s>bs){bs=s;best=d;}
-      });
-      if(best){best.off.push(i);offCount[i]++;placed=true;break;}
-    }
-    if(!placed) break;
-  }
-
-  // 4. Shifts for each day
   const tally=[0,1,2].map(()=>({S:0,SE:0,L:0,O:0}));
   days.forEach(d=>{
     const working=[0,1,2].filter(i=>!d.off.includes(i));
@@ -266,11 +331,11 @@ function generate(y,m,carry){
       }
     });
     free.forEach(i=>{d.shifts[i]=t.shift()||'S';});
-    d.shifts.forEach((s,i)=>tally[i][s]++);
+    d.shifts.forEach((s,i)=>{ if(tally[i][s]!==undefined) tally[i][s]++; });
 
     if(d.off.length>1) d.warn.push(`${d.off.length} assistants are off`);
     if(d.dow===0&&!d.off.length) d.warn.push('No Sunday off is given');
-    const cov=coverage(d.shifts);
+    const cov=coverage(d.shifts,480,1230);
     const zero=cov.find(c=>c[1]===0);
     if(zero) d.warn.push(`No assistant at ${fmt(zero[0])}`);
     const eve=Math.min(...cov.filter(c=>c[0]>=1080).map(c=>c[1]));
@@ -280,70 +345,141 @@ function generate(y,m,carry){
       if(mid<2) d.warn.push('Busy day, but only 1 assistant 1–4 PM');
     }
   });
-
   const stats=[0,1,2].map(i=>({off:offCount[i],sun:sun[i],S:tally[i].S,SE:tally[i].SE,L:tally[i].L,
     req:days.filter(d=>d.cells[i]==='O').length}));
   const mw=[];
-  stats.forEach((s,i)=>{ if(s.off!==OFFS) mw.push(`${nameOf(i)} has ${s.off} off days (target ${OFFS})`); });
-  return {y,m,days,stats,mw,carry,shared:md.shared||null};
+  stats.forEach((s,i)=>{ if(s.off!==OFFS) mw.push(`${nameOf('asst',i)} has ${s.off} off days. The target is ${OFFS}.`); });
+  return {team:'asst',y,m,days,stats,mw,carry,shared:md.shared||null};
 }
 
-function computeMonth(y,m){
+/* ---------- Doctors ---------- */
+function generateDoc(y,m,carry){
+  const md=teamData('doc',y,m,false), LV=Math.max(0,+db.doctors.leaves||4), CLM=Math.max(0,+db.doctors.cl||2);
+  const defs=db.doctors.defaults;
+  const days=baseDays(md,y,m);
+  const leave=[0,0,0], cl=[0,0,0], sun=[0,0,0];
+  const rotating=[0,1,2].filter(i=>defs[i]!=='DM');   // the Split and Second doctors share Sundays
+
+  days.forEach(d=>{ for(let i=0;i<3;i++){
+    if(d.ov[i]==='O'){ d.off.push(i); leave[i]++; if(d.dow===0) sun[i]++; }
+    else if(d.ov[i]==='CL'){ d.off.push(i); cl[i]++; }
+  }});
+  // Sundays: only 1 of the rotating doctors works. The Sunday off counts as a leave day.
+  days.forEach(d=>{
+    if(d.dow!==0) return;
+    const avail=rotating.filter(i=>!d.off.includes(i));
+    if(avail.length<2) return;
+    const c=avail.filter(i=>!d.ov[i]);
+    if(!c.length) return;
+    c.sort((a,b)=>(carry[a]+sun[a])-(carry[b]+sun[b])||leave[a]-leave[b]||rot(a,d)-rot(b,d));
+    const i=c[0]; d.off.push(i); leave[i]++; sun[i]++;
+  });
+  fillOffs(days,leave,LV);
+
+  const tally=[0,1,2].map(()=>({DS:0,DE:0,DM:0}));
+  days.forEach(d=>{
+    d.shifts=[null,null,null];
+    d.locked=[0,1,2].map(i=>!!d.cells[i]);
+    d.off.forEach(i=>d.shifts[i]=d.ov[i]==='CL'?'CL':'O');
+    if(d.dow===0){
+      [0,1,2].forEach(i=>{ if(d.shifts[i]) return; d.shifts[i]=d.ov[i]||(defs[i]==='DM'?'X':'DS'); });
+    }else{
+      const working=[0,1,2].filter(i=>!d.shifts[i]);
+      working.forEach(i=>{ if(d.ov[i]) d.shifts[i]=d.ov[i]; });
+      const free=working.filter(i=>!d.ov[i]);
+      if(working.length>=3){ free.forEach(i=>d.shifts[i]=defs[i]); }
+      else{
+        const need=['DS','DE'].filter(s=>!working.some(i=>d.shifts[i]===s));
+        free.forEach(i=>{ const k=need.indexOf(defs[i]); if(k>=0){ d.shifts[i]=defs[i]; need.splice(k,1); } });
+        free.filter(i=>!d.shifts[i]).forEach(i=>{ d.shifts[i]=need.shift()||defs[i]; });
+      }
+    }
+    d.shifts.forEach((s,i)=>{ if(tally[i][s]!==undefined) tally[i][s]++; });
+
+    const offs=d.off.length;
+    const work=d.shifts.filter(s=>SH[s].iv.length).length;
+    if(d.dow!==0&&offs>1) d.warn.push(`${offs} doctors are off`);
+    if(work===0) d.warn.push('No doctor on this day');
+    else{
+      const cov=coverage(d.shifts,540,1230,d.dow===0?[780,960]:null);
+      const zero=cov.find(c=>c[1]===0);
+      if(zero) d.warn.push(`No doctor at ${fmt(zero[0])}`);
+    }
+  });
+  const stats=[0,1,2].map(i=>({leave:leave[i],cl:cl[i],sun:sun[i],DS:tally[i].DS,DE:tally[i].DE,DM:tally[i].DM,
+    req:days.filter(d=>d.cells[i]==='O').length}));
+  const mw=[];
+  stats.forEach((s,i)=>{
+    if(s.leave>LV) mw.push(`${nameOf('doc',i)} has ${s.leave} leave days. The limit is ${LV}.`);
+    else if(s.leave<LV) mw.push(`${nameOf('doc',i)} has ${s.leave} leave days. The target is ${LV}.`);
+    if(s.cl>CLM) mw.push(`${nameOf('doc',i)} used ${s.cl} casual leave days. The limit is ${CLM}.`);
+  });
+  return {team:'doc',y,m,days,stats,mw,carry,shared:md.shared||null};
+}
+
+/* ---------- Month calculation with Sunday carry ---------- */
+function computeMonth(team,y,m){
+  const gen=team==='doc'?generateDoc:generateAsst;
   let carry=[0,0,0];
   let [sy,sm]=String(db.settings.startMonth||ymKey(y,m)).split('-').map(Number);
   let safety=0;
   while((sy<y||(sy===y&&sm<m))&&safety++<240){
-    const r=generate(sy,sm,carry);
+    const r=gen(sy,sm,carry);
     carry=carry.map((c,i)=>c+r.stats[i].sun);
     sm++; if(sm>12){sm=1;sy++;}
   }
-  return generate(y,m,carry);
+  return gen(y,m,carry);
 }
-function dayInfo(date){ const [y,m,d]=parseIso(date); return computeMonth(y,m).days[d-1]; }
+function dayInfo(team,date){ const [y,m,d]=parseIso(date); return computeMonth(team,y,m).days[d-1]; }
 
-/* ---------- Freezing: past days never change; after sharing, edits only move later days ---------- */
-function freezeDays(y,m,pred){
-  const r=computeMonth(y,m), md=monthData(y,m,true); let ch=false;
-  r.days.forEach(d=>{ if(pred(d)&&!md.snap[d.date]){ md.snap[d.date]=d.shifts.slice(); ch=true; } });
+function consFor(date){
+  const [y,m]=parseIso(date), dow=new Date(y,m-1,parseIso(date)[2]).getDay();
+  const abs=(monthData(y,m,false).cons||{})[date]||{};
+  return db.consultants.map((c,i)=>({i,name:c.name,start:+c.start,end:+c.end,time:fmtRange(+c.start,+c.end),absent:!!abs[i]}))
+    .filter(c=>db.consultants[c.i].days.includes(dow));
+}
+
+/* ---------- Freezing: past days never change; after sharing, edits move only later days ---------- */
+function freezeDays(team,y,m,pred){
+  const r=computeMonth(team,y,m), td=teamData(team,y,m,true); let ch=false;
+  r.days.forEach(d=>{ if(pred(d)&&!td.snap[d.date]){ td.snap[d.date]=d.shifts.slice(); ch=true; } });
   return ch;
 }
 function freezePast(){
   const T=todayIso(); const [ty,tm]=parseIso(T);
-  let [sy,sm]=String(db.settings.startMonth).split('-').map(Number), ch=false, safety=0;
-  while((sy<ty||(sy===ty&&sm<=tm))&&safety++<240){
-    if(freezeDays(sy,sm,d=>d.date<T)) ch=true;
-    sm++; if(sm>12){sm=1;sy++;}
-  }
+  let ch=false;
+  ['asst','doc'].forEach(team=>{
+    let [sy,sm]=String(db.settings.startMonth).split('-').map(Number), safety=0;
+    while((sy<ty||(sy===ty&&sm<=tm))&&safety++<240){
+      if(freezeDays(team,sy,sm,d=>d.date<T)) ch=true;
+      sm++; if(sm>12){sm=1;sy++;}
+    }
+  });
   if(ch) save();
 }
-// Called before a change on "date". Returns a message for the toast.
-function beforeEdit(date){
-  const T=todayIso(), [y,m]=parseIso(date), md=monthData(y,m,true);
+function beforeEdit(team,date){
+  const T=todayIso(), [y,m]=parseIso(date), td=teamData(team,y,m,true);
   if(date<T) return 'Saved. Past days do not move.';
-  delete md.snap[date];
-  if(md.shared){ freezeDays(y,m,d=>d.date<date); return 'Saved. Only the days after this day can move.'; }
+  delete td.snap[date];
+  if(td.shared){ freezeDays(team,y,m,d=>d.date<date); return 'Saved. Only the days after this day can move.'; }
   return 'Saved. The site rebalanced the month.';
 }
 
 /* ---------- UI state ---------- */
-let view={y:now.getFullYear(),m:now.getMonth()+1,tab:'today',dayOffset:0,who:0,scrollToday:false};
+let view={y:now.getFullYear(),m:now.getMonth()+1,tab:'today',team:'asst',dayOffset:0,who:0,planMode:'O',scrollToday:false};
 let cur=null;
 
 function moveMonth(k){view.m+=k;if(view.m>12){view.m=1;view.y++;}if(view.m<1){view.m=12;view.y--;}render();window.scrollTo(0,0);}
-function setTab(t){
-  view.tab=t;
-  if(t==='rota') view.scrollToday=true;
-  render(); if(t!=='rota') window.scrollTo(0,0);
-}
+function setTab(t){ view.tab=t; if(t==='rota') view.scrollToday=true; render(); if(t!=='rota') window.scrollTo(0,0); }
+function setTeam(t){ view.team=t; view.who=0; view.planMode='O'; if(view.tab==='rota') view.scrollToday=true; render(); }
 function moveDay(k){view.dayOffset+=k;render();}
-
 function toast(msg){
   const el=document.getElementById('toast'); el.textContent=msg; el.classList.add('show');
   clearTimeout(toast.t); toast.t=setTimeout(()=>el.classList.remove('show'),2600);
 }
 
 function render(){
-  cur=computeMonth(view.y,view.m);
+  cur=computeMonth(view.team,view.y,view.m);
   document.getElementById('clinicName').textContent=db.settings.clinic||'Clinic Rota';
   document.getElementById('monthTitle').textContent=`${MN[view.m-1]} ${view.y}`;
   document.getElementById('monthNav').style.display=(view.tab==='today'||view.tab==='settings')?'none':'flex';
@@ -359,155 +495,231 @@ function render(){
   }
 }
 
+const teamSwitch=()=>`<div class="switch" role="tablist">${['asst','doc'].map(t=>`<button role="tab" aria-selected="${view.team===t}" class="${view.team===t?'on':''}" onclick="setTeam('${t}')">${TEAM[t].label}</button>`).join('')}</div>`;
 function stepsHtml(active){
   const s=[['plan','1. Off days'],['rota','2. Check rota'],['share','3. Share']];
   return `<div class="steps">${s.map(([k,l])=>`<button class="step ${active===k?'on':''}" onclick="${k==='share'?'shareImage()':`setTab('${k}')`}">${l}</button>`).join('')}</div>`;
 }
-const badge=(i,size)=>`<span class="badge" style="background:${AC[i]}${size?`;width:${size}px;height:${size}px;font-size:${Math.round(size/3)}px`:''}">${esc(initials(i))}</span>`;
+const badge=(team,i,size)=>`<span class="badge" style="background:${COL[team][i]}${size?`;width:${size}px;height:${size}px;font-size:${Math.round(size/3)}px`:''}">${esc(initials(team,i))}</span>`;
 
 /* ---------- Today ---------- */
 function renderToday(){
   const base=new Date(); base.setDate(base.getDate()+view.dayOffset);
-  const date=isoOf(base), d=dayInfo(date);
+  const date=isoOf(base), da=dayInfo('asst',date), dd=dayInfo('doc',date), all=db.settings.todayAll;
+  const cons=consFor(date);
   const label=view.dayOffset===0?'Today':view.dayOffset===1?'Tomorrow':view.dayOffset===-1?'Yesterday':WD[base.getDay()];
   let h='';
-  if(defaultNames()) h+=`<div class="info"><b>First step:</b> add the names of the 3 assistants.<button class="btn primary" onclick="setTab('settings')">Add names</button></div>`;
-  const lb=db.settings.lastBackup, hasData=Object.keys(db.months).length>0;
-  if(hasData&&(!lb||(Date.now()-lb)>7*864e5)) h+=`<div class="alert">You have no backup from the last 7 days.<button class="btn" onclick="exportData()">Download backup now</button></div>`;
+  if(defaultNames('asst')||defaultNames('doc')) h+=`<div class="info"><b>First step:</b> add the names of the doctors and assistants.<button class="btn primary" onclick="setTab('settings')">Add names</button></div>`;
+  const lb=db.settings.lastBackup, hasData=Object.values(db.months).some(md=>Object.keys(md.cells||{}).length||Object.keys(md.busy||{}).length||Object.keys((md.doc||{}).cells||{}).length);
+  if(hasData&&(!lb||(Date.now()-lb)>7*864e5)) h+=`<div class="alert">You have no backup from the last 7 days.<button class="btn" onclick="exportData()">Download backup</button></div>`;
   h+=`<div class="daynav"><button onclick="moveDay(-1)" aria-label="Previous day">‹</button>
     <div><b>${label}</b><span>${WD[base.getDay()]}, ${base.getDate()} ${MN[base.getMonth()]}</span></div>
     <button onclick="moveDay(1)" aria-label="Next day">›</button></div>`;
-  [0,1,2].forEach(i=>{
-    const s=SH[d.shifts[i]];
-    h+=`<button class="pcard" onclick="openPick('${date}',${i})">${badge(i)}
-      <div class="pn">${esc(nameOf(i))}<small>${d.locked[i]?'● Set by you':'Tap to change'}</small></div>
-      <div class="ps" style="background:${s.bg};color:${s.fg}">${s.label}<small>${s.time}</small></div></button>`;
-  });
-  h+=`<div class="card"><h2>Who is in the clinic</h2>${timeline(d)}</div>`;
-  h+=`<button class="busyrow ${d.busy?'on':''}" onclick="toggleBusy('${date}')">⚡ Busy 1–4 PM: <b>${d.busy?'Yes':'No'}</b> <span class="small">· tap to ${d.busy?'remove':'add'} a Long morning</span></button>`;
-  h+=d.warn.map(w=>`<div class="warn">⚠ ${esc(w)}</div>`).join('');
+  h+=`<div class="switch">
+    <button class="${!all?'on':''}" onclick="setTodayAll(false)">Doctors and assistants</button>
+    <button class="${all?'on':''}" onclick="setTodayAll(true)">All staff</button></div>`;
+  h+=dayStrip(dd,da,all?cons:[],view.dayOffset===0);
+  // Doctors
+  h+=`<div class="plist"><h2>Doctors</h2>${personRows('doc',date,dd)}${dd.warn.length?`<div class="wlist">${dd.warn.map(w=>`<div class="warn">⚠ ${esc(w)}</div>`).join('')}</div>`:''}</div>`;
+  // Assistants
+  h+=`<div class="plist"><h2>Assistants</h2>${personRows('asst',date,da)}
+    <button class="busyrow ${da.busy?'on':''}" onclick="toggleBusy('${date}')">⚡ Busy 1–4 PM: ${da.busy?'Yes':'No'}<span class="small"> (tap to ${da.busy?'remove':'add'} a Long morning)</span></button>
+    ${da.warn.length?`<div class="wlist">${da.warn.map(w=>`<div class="warn">⚠ ${esc(w)}</div>`).join('')}</div>`:''}</div>`;
+  if(all){
+    h+=`<div class="plist"><h2>Consultants</h2>${cons.length?cons.map(c=>`<button class="prow" onclick="toggleCons('${date}',${c.i})">
+      <span class="badge" style="background:${CONS_COL}">C${c.i+1}</span>
+      <span class="pn">${esc(c.name)}<small>Tap to mark ${c.absent?'as coming':'not coming'}</small></span>
+      <span class="pill" style="background:${c.absent?'#f1f5f3':'#e2e8f0'};color:${c.absent?'#8a9a96':'#334155'}">${c.absent?'Not coming':'In clinic'}<small>${c.time}</small></span></button>`).join('')
+      :`<p class="small" style="padding:0 14px 12px">No consultant comes on ${WD[base.getDay()]}.</p>`}</div>`;
+  }
   h+=`<button class="btn primary" onclick="shareDay('${date}')">Send this day on WhatsApp</button>`;
   h+=`<div class="card" style="margin-top:14px"><h2>How to use this site</h2><p class="small">
-    1. At the start of the month, open <b>Off days</b>. Tap the days each assistant asked for.<br>
+    1. At the start of the month, open <b>Off days</b>. Tap the days each person asked for.<br>
     2. Open <b>Rota</b>. Check the shifts. Tap a cell to change it.<br>
     3. Tap <b>Share</b> to send the month to the staff group.<br>
     4. Each day, open <b>Today</b> to see who works when.</p></div>`;
   return h;
 }
-function timeline(d){
+function personRows(team,date,d){
+  return [0,1,2].map(i=>{
+    const c=d.shifts[i], s=SH[c];
+    return `<button class="prow" onclick="openPick('${team}','${date}',${i})">${badge(team,i)}
+      <span class="pn">${esc(nameOf(team,i))}<small>${d.locked[i]?'● Set by you':'Tap to change'}</small></span>
+      <span class="pill" style="background:${s.bg};color:${s.fg}">${shLabel(team,c)}<small>${shTime(team,c)}</small></span></button>`;
+  }).join('');
+}
+function dayStrip(dd,da,cons,showNow){
   const A=480,B=1230,pc=t=>((t-A)/(B-A)*100).toFixed(2)+'%';
-  let h=`<div class="tl">`;
-  [0,1,2].forEach(i=>{
-    const s=SH[d.shifts[i]];
-    h+=`<div class="tlrow"><span style="color:${AC[i]}">${esc(initials(i))}</span><div class="track">${s.iv.map(([a,b])=>`<div class="seg" style="left:${pc(a)};width:calc(${pc(b)} - ${pc(a)});background:${s.bar}"></div>`).join('')}<div class="eve" style="left:${pc(1080)}"></div></div></div>`;
-  });
-  h+=`<div class="ticks">${[[480,'8 AM'],[720,'12'],[960,'4 PM'],[1080,'6'],[1230,'8:30']].map(([t,l])=>`<span class="tick" style="left:${pc(t)}">${l}</span>`).join('')}</div></div>`;
-  return h;
+  const nowMin=new Date().getHours()*60+new Date().getMinutes();
+  const overlay=`<div class="line6" style="left:${pc(1080)}"></div>${showNow&&nowMin>=A&&nowMin<=B?`<div class="now" style="left:${pc(nowMin)}"></div>`:''}`;
+  const row=(lab,col,iv,barCol)=>`<div class="srow"><span class="sl" style="color:${col}">${esc(lab)}</span><div class="track">${iv.map(([a,b])=>`<div class="bar" style="left:${pc(a)};width:calc(${pc(b)} - ${pc(a)});background:${barCol}"></div>`).join('')}${overlay}</div></div>`;
+  let h=`<div class="strip" aria-label="Who is in the clinic">`;
+  h+=`<div class="grp">Doctors</div>`+[0,1,2].map(i=>row(initials('doc',i),COL.doc[i],SH[dd.shifts[i]].iv,SH[dd.shifts[i]].bar)).join('');
+  h+=`<div class="grp">Assistants</div>`+[0,1,2].map(i=>row(initials('asst',i),COL.asst[i],SH[da.shifts[i]].iv,SH[da.shifts[i]].bar)).join('');
+  if(cons.length) h+=`<div class="grp">Consultants</div>`+cons.map(c=>row('C'+(c.i+1),CONS_COL,c.absent?[]:[[c.start,c.end]],'#94a3b8')).join('');
+  h+=`<div class="ticks">${[[480,'8 AM'],[720,'12'],[960,'4 PM'],[1080,'6'],[1230,'8:30']].map(([t,l])=>`<span class="tick" style="left:${pc(t)}">${l}</span>`).join('')}</div>`;
+  const at=(shifts,t)=>shifts.filter(s=>SH[s].iv.some(([a,b])=>t>=a&&t<b)).length;
+  const pl=(n,w)=>`<b>${n}</b> ${w}${n===1?'':'s'}`;
+  h+=`<div class="counts"><span>After 6 PM: ${pl(at(dd.shifts,1080),'doctor')}, ${pl(at(da.shifts,1080),'assistant')}</span>
+    <span>1 to 4 PM: ${pl(at(dd.shifts,840),'doctor')}, ${pl(at(da.shifts,840),'assistant')}</span></div>`;
+  return h+`</div>`;
+}
+function setTodayAll(v){ db.settings.todayAll=v; save(); render(); }
+function toggleCons(date,i){
+  const [y,m]=parseIso(date), md=monthData(y,m,true);
+  const c=md.cons[date]||{};
+  if(c[i]) delete c[i]; else c[i]=true;
+  if(Object.keys(c).length) md.cons[date]=c; else delete md.cons[date];
+  save(); keepScroll(render); toast(c[i]?`${db.consultants[i].name} is marked not coming.`:`${db.consultants[i].name} is marked as coming.`);
 }
 
 /* ---------- Off days planner ---------- */
 function renderPlan(r){
-  const OFFS=+db.settings.offs||5, sel=view.who, T=todayIso();
-  let h=stepsHtml('plan');
-  h+=`<p class="tip">Choose an assistant. Then tap the days she asked for. The site fills the rest of her ${OFFS} off days.</p>`;
+  const team=r.team, sel=view.who, T=todayIso();
+  const target=team==='doc'?(+db.doctors.leaves||4):(+db.settings.offs||5), CLM=+db.doctors.cl||2;
+  const offOf=s=>team==='doc'?s.leave:s.off;
+  let h=teamSwitch()+stepsHtml('plan');
+  h+=`<p class="tip">Choose a ${TEAM[team].one}. Then tap the days that person asked for. The site fills the rest of the ${target} ${team==='doc'?'leave':'off'} days.</p>`;
+  if(team==='doc') h+=`<div class="switch">
+    <button class="${view.planMode==='O'?'on':''}" onclick="view.planMode='O';render()">Mark leave</button>
+    <button class="${view.planMode==='CL'?'on':''}" onclick="view.planMode='CL';render()">Mark casual leave</button></div>`;
   h+=`<div class="whos">${[0,1,2].map(i=>{
-    const s=r.stats[i], cls=s.off===OFFS?'ok':'bad';
-    return `<button class="who ${sel===i?'on':''}" style="--c:${AC[i]}" onclick="view.who=${i};render()">${badge(i,32)}
-      <div>${esc(nameOf(i))}<small>${s.req} asked · ${s.off-s.req} auto · ${s.sun} Sunday</small></div>
-      <span class="cnt ${cls}">${s.off}/${OFFS}</span></button>`;}).join('')}</div>`;
+    const s=r.stats[i], o=offOf(s), cls=o===target?'ok':'bad';
+    const sub=team==='doc'
+      ?`${s.req} asked, ${o-s.req} auto, ${s.sun} Sunday<br>Casual leave: ${s.cl} of ${CLM} used`
+      :`${s.req} asked, ${o-s.req} auto, ${s.sun} Sunday`;
+    return `<button class="who ${sel===i?'on':''}" style="--c:${COL[team][i]}" onclick="view.who=${i};render()">${badge(team,i,32)}
+      <div>${esc(nameOf(team,i))}<small>${sub}</small></div><span class="cnt ${cls}">${o}/${target}</span></button>`;}).join('')}</div>`;
   h+=`<div class="calh">${['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(x=>`<div>${x}</div>`).join('')}</div><div class="cal">`;
   const lead=(r.days[0].dow+6)%7;
   for(let k=0;k<lead;k++) h+=`<div></div>`;
   r.days.forEach(d=>{
-    const mine=d.cells[sel]==='O';
+    const mine=d.cells[sel]==='O'||d.cells[sel]==='CL';
     const minis=d.off.map(i=>{
-      const kind=d.cells[i]==='O'?'':(d.frozen?'fixed':'auto');
-      return `<span class="mini ${kind}" style="--c:${AC[i]}">${esc(initials(i))}</span>`;}).join('');
-    h+=`<button class="cday ${d.dow===0?'sun':''} ${d.date<T?'past':''} ${d.date===T?'today':''} ${mine?'mine':''}" style="--c:${AC[sel]}" onclick="planTap('${d.date}')"><b>${d.day}</b>${minis}</button>`;
+      const isCL=d.shifts[i]==='CL';
+      const kind=isCL?'cl':d.cells[i]==='O'?'':(d.frozen?'fixed':'auto');
+      return `<span class="mini ${kind}" style="--c:${COL[team][i]}">${esc(initials(team,i))}${isCL?' CL':''}</span>`;}).join('');
+    h+=`<button class="cday ${d.dow===0?'sun':''} ${d.date<T?'past':''} ${d.date===T?'today':''} ${mine?'mine':''}" style="--c:${COL[team][sel]}" onclick="planTap('${d.date}')" aria-label="${d.day} ${MN[r.m-1]}"><b>${d.day}</b>${minis}</button>`;
   });
-  h+=`</div>`;
-  h+=`<div class="legend" style="margin-top:10px">
-    <span class="chip" style="background:#f3f4f6">Solid = she asked</span>
-    <span class="chip" style="background:#f3f4f6">Dashed = auto</span>
-    <span class="chip" style="background:#f3f4f6">Grey = past</span></div>`;
+  h+=`</div><div class="legend" style="margin-top:10px">
+    <span class="chip" style="background:#fff;border:1px solid var(--line)">Solid: the person asked</span>
+    <span class="chip" style="background:#fff;border:1px dashed #9aa9a5">Dashed: added by the site</span>
+    ${team==='doc'?'<span class="chip" style="background:#fce7f3;color:#9d174d">CL: casual leave</span>':''}</div>`;
+  if(team==='doc') h+=`<p class="small">The Morning doctor has no Sunday duty. The other two doctors take Sundays in turn. A Sunday off counts as a leave day.</p>`;
   if(r.mw.length) h+=`<div class="alert"><ul>${r.mw.map(w=>`<li>${esc(w)}</li>`).join('')}</ul></div>`;
-  h+=`<button class="btn primary" onclick="setTab('rota')">Make the rota →</button>`;
+  h+=`<button class="btn primary" onclick="setTab('rota')">Make the rota</button>`;
   return h;
 }
 function planTap(date){
   if(date<todayIso()) return toast('This day is in the past.');
-  const i=view.who, [y,m]=parseIso(date), md=monthData(y,m,true);
-  const c=md.cells[date]||{};
-  if(c[i]==='O'){ delete c[i]; }
+  const team=view.team, i=view.who, [y,m,dd]=parseIso(date), td=teamData(team,y,m,true);
+  const code=team==='doc'?view.planMode:'O';
+  const dow=new Date(y,m-1,dd).getDay();
+  if(team==='doc'&&dow===0&&db.doctors.defaults[i]==='DM') return toast(`${nameOf(team,i)} has no Sunday duty.`);
+  const c=td.cells[date]||{};
+  if(c[i]===code){ delete c[i]; }
   else{
-    const other=[0,1,2].find(k=>k!==i&&c[k]==='O');
-    if(other!==undefined) return toast(`${nameOf(other)} already asked for this day. Only 1 off per day.`);
-    c[i]='O';
+    const other=[0,1,2].find(k=>k!==i&&(c[k]==='O'||c[k]==='CL'));
+    if(other!==undefined) return toast(`${nameOf(team,other)} already asked for this day. Only 1 person can be off.`);
+    if(code==='CL'){
+      const used=computeMonth(team,y,m).stats[i].cl;
+      if(used>=(+db.doctors.cl||2)) return toast(`${nameOf(team,i)} already used all casual leave this month.`);
+    }
+    c[i]=code;
   }
-  delete md.snap[date];
-  if(Object.keys(c).length) md.cells[date]=c; else delete md.cells[date];
+  delete td.snap[date];
+  if(Object.keys(c).length) td.cells[date]=c; else delete td.cells[date];
   save(); keepScroll(render);
 }
 
 /* ---------- Rota ---------- */
-function cellHtml(d,i){
-  const s=SH[d.shifts[i]];
-  return `<button class="cell ${d.locked[i]?'locked':''}" style="background:${s.bg};color:${s.fg}" onclick="openPick('${d.date}',${i})"><span class="ini">${esc(initials(i))}</span>${s.short}<small>${s.time}</small></button>`;
+function cellHtml(team,d,i){
+  const c=d.shifts[i], s=SH[c];
+  return `<button class="cell ${d.locked[i]?'locked':''}" style="background:${s.bg};color:${s.fg}" onclick="openPick('${team}','${d.date}',${i})"><span class="ini">${esc(initials(team,i))}</span>${shShort(team,c)}<small>${team==='doc'&&c==='O'?'Day off':s.time}</small></button>`;
 }
 function renderRota(r){
-  const T=todayIso();
+  const team=r.team, T=todayIso();
   const dayWarn=r.days.filter(d=>d.warn.length).length;
-  let h=stepsHtml('rota');
-  h+=`<div class="legend">${['S','SE','L','O'].map(k=>`<span class="chip" style="background:${SH[k].bg};color:${SH[k].fg}">${SH[k].label} · ${SH[k].time}</span>`).join('')}</div>`;
+  const codes=team==='doc'?['DS','DE','DM','O','CL']:['S','SE','L','O'];
+  let h=teamSwitch()+stepsHtml('rota');
+  h+=`<div class="legend">${codes.map(k=>`<span class="chip" style="background:${SH[k].bg};color:${SH[k].fg}">${shLabel(team,k)}${SH[k].iv.length?' '+SH[k].time:''}</span>`).join('')}</div>`;
   h+=r.shared
     ? `<div class="info">You shared this rota on ${new Date(r.shared).getDate()} ${MN[new Date(r.shared).getMonth()].slice(0,3)}. A change now moves only the days after it.</div>`
-    : `<p class="tip">Tap a cell to change it or swap it. A dot means you set it. Tap ⚡ for a busy 1–4 PM day.</p>`;
+    : `<p class="tip">Tap a cell to change it or swap it. A dot means you set it.${team==='asst'?' Tap ⚡ for a busy 1–4 PM day.':' Tap a consultant to mark a day as not coming.'}</p>`;
   if(r.mw.length||dayWarn){
-    h+=`<div class="alert"><b>Check this month</b><ul>${r.mw.map(w=>`<li>${esc(w)}</li>`).join('')}${dayWarn?`<li>${dayWarn} day(s) have a warning below</li>`:''}</ul></div>`;
+    h+=`<div class="alert"><b>Check this month</b><ul>${r.mw.map(w=>`<li>${esc(w)}</li>`).join('')}${dayWarn?`<li>${dayWarn} day(s) have a warning below.</li>`:''}</ul></div>`;
   }
-  h+=`<div class="ghead"><div>Date</div>${[0,1,2].map(i=>`<div style="background:${AC[i]}">${esc(nameOf(i))}</div>`).join('')}<div>Busy</div></div>`;
+  h+=`<div class="${team==='doc'?'doc':''}">`;
+  h+=`<div class="ghead"><div class="plain">Date</div>${[0,1,2].map(i=>`<div style="background:${COL[team][i]}">${esc(nameOf(team,i))}</div>`).join('')}${team==='asst'?'<div class="plain">Busy</div>':''}</div>`;
   r.days.forEach(d=>{
+    const cons=team==='doc'?consFor(d.date):[];
     h+=`<div class="day ${d.dow===0?'sun':''} ${d.date===T?'today':''}" id="d-${d.date}">
       <div class="row">
         <div class="date"><b>${d.day}</b><span>${WD[d.dow]}</span></div>
-        ${[0,1,2].map(i=>cellHtml(d,i)).join('')}
-        <button class="busy ${d.busy?'on':''}" onclick="toggleBusy('${d.date}')" aria-label="Busy day">⚡</button>
+        ${[0,1,2].map(i=>cellHtml(team,d,i)).join('')}
+        ${team==='asst'?`<button class="busy ${d.busy?'on':''}" onclick="toggleBusy('${d.date}')" aria-label="Busy day">⚡</button>`:''}
       </div>
+      ${cons.length?`<div class="consline">${cons.map(c=>`<button class="cons ${c.absent?'absent':''}" onclick="toggleCons('${d.date}',${c.i})">${esc(c.name)} ${c.time}</button>`).join('')}</div>`:''}
       ${d.warn.map(w=>`<div class="warn">⚠ ${esc(w)}</div>`).join('')}
     </div>`;
   });
-  h+=`<button class="btn primary" onclick="shareImage()">Share this month ↗</button>`;
+  h+=`</div><button class="btn primary" onclick="shareImage()">Share this month</button>`;
   return h;
 }
 
 /* ---------- Summary ---------- */
 function renderSummary(r){
-  const OFFS=+db.settings.offs||5;
-  let h=`<div class="card"><h2>${MN[r.m-1]} ${r.y}</h2><table>
-    <tr><th>Assistant</th><th>Off</th><th>Sun off</th><th>Split</th><th>Second</th><th>Long</th></tr>
-    ${r.stats.map((s,i)=>`<tr><td><span style="color:${AC[i]};font-weight:700">${esc(nameOf(i))}</span></td><td>${s.off}/${OFFS}</td><td>${s.sun}</td><td>${s.S}</td><td>${s.SE}</td><td>${s.L}</td></tr>`).join('')}
-  </table></div>
-  <div class="card"><h2>Sunday off balance</h2><table>
-    <tr><th>Assistant</th><th>Before this month</th><th>After this month</th></tr>
-    ${r.stats.map((s,i)=>`<tr><td>${esc(nameOf(i))}</td><td>${r.carry[i]}</td><td>${r.carry[i]+s.sun}</td></tr>`).join('')}
-  </table><p class="small">The site gives the next Sunday off to the assistant with the lowest balance. This balance carries forward to the next month.</p></div>`;
-  if(r.mw.length) h+=`<div class="alert"><b>Off day check</b><ul>${r.mw.map(w=>`<li>${esc(w)}</li>`).join('')}</ul></div>`;
+  const team=r.team;
+  let h=teamSwitch();
+  if(team==='asst'){
+    const OFFS=+db.settings.offs||5;
+    h+=`<div class="card"><h2>${MN[r.m-1]} ${r.y}</h2><table>
+      <tr><th>Assistant</th><th>Off</th><th>Sun off</th><th>Split</th><th>Second</th><th>Long</th></tr>
+      ${r.stats.map((s,i)=>`<tr><td><span style="color:${COL.asst[i]};font-weight:700">${esc(nameOf(team,i))}</span></td><td>${s.off}/${OFFS}</td><td>${s.sun}</td><td>${s.S}</td><td>${s.SE}</td><td>${s.L}</td></tr>`).join('')}
+    </table></div>`;
+  }else{
+    const LV=+db.doctors.leaves||4, CLM=+db.doctors.cl||2;
+    h+=`<div class="card"><h2>${MN[r.m-1]} ${r.y}</h2><table>
+      <tr><th>Doctor</th><th>Leave</th><th>CL</th><th>Sun off</th><th>Split</th><th>Second</th><th>Morn.</th></tr>
+      ${r.stats.map((s,i)=>`<tr><td><span style="color:${COL.doc[i]};font-weight:700">${esc(nameOf(team,i))}</span></td><td>${s.leave}/${LV}</td><td>${s.cl}/${CLM}</td><td>${s.sun}</td><td>${s.DS}</td><td>${s.DE}</td><td>${s.DM}</td></tr>`).join('')}
+    </table><p class="small">Casual leave does not carry forward. Unused casual leave lapses at the end of the month.</p></div>`;
+  }
+  const rows=[0,1,2].filter(i=>team==='asst'||db.doctors.defaults[i]!=='DM');
+  h+=`<div class="card"><h2>Sunday off balance</h2><table>
+    <tr><th>${team==='doc'?'Doctor':'Assistant'}</th><th>Before this month</th><th>After this month</th></tr>
+    ${rows.map(i=>`<tr><td>${esc(nameOf(team,i))}</td><td>${r.carry[i]}</td><td>${r.carry[i]+r.stats[i].sun}</td></tr>`).join('')}
+  </table><p class="small">The site gives the next Sunday off to the person with the lowest balance. This balance carries forward to the next month.</p></div>`;
+  if(r.mw.length) h+=`<div class="alert"><b>Leave check</b><ul>${r.mw.map(w=>`<li>${esc(w)}</li>`).join('')}</ul></div>`;
   h+=`<div class="card"><h2>Rebalance</h2><p class="small">Use this when the staff have not seen the rota yet. The site keeps past days and your set cells. It recalculates all other days from today.</p>
     <button class="btn" onclick="recalcFuture()">Recalculate from today</button></div>
-  <div class="card"><h2>Reset</h2><p class="small">This removes all your set cells, off requests and busy days for ${MN[r.m-1]} from today on. Past days stay.</p>
+  <div class="card"><h2>Reset</h2><p class="small">This removes your set cells and requests for the ${TEAM[team].label.toLowerCase()} in ${MN[r.m-1]} from today on. Past days stay.</p>
     <button class="btn danger" onclick="resetMonth()">Clear changes for this month</button></div>`;
   return h;
 }
 
 /* ---------- Settings ---------- */
 function renderSettings(){
-  const s=db.settings, lb=s.lastBackup?new Date(s.lastBackup):null;
-  return `<div class="card"><h2>Assistants</h2>
+  const s=db.settings, lb=s.lastBackup?new Date(s.lastBackup):null, D=db.doctors;
+  const sel=(i)=>`<select onchange="setDocDefault(${i},this.value)" aria-label="Fixed shift">${['DS','DE','DM'].map(k=>`<option value="${k}" ${D.defaults[i]===k?'selected':''}>${SH[k].label} (${SH[k].time})</option>`).join('')}</select>`;
+  return `<div class="card"><h2>Doctors</h2>
+    ${[0,1,2].map(i=>`<label>Doctor ${i+1}</label><input type="text" value="${esc(D.names[i]||'')}" onchange="setDocName(${i},this.value)">
+      <label>Fixed shift</label>${sel(i)}`).join('<hr class="sep">')}
+    <hr class="sep"><div class="pair">
+      <div><label>Leave days per month</label><input type="number" min="0" max="15" value="${D.leaves}" onchange="setDoc('leaves',this.value)"></div>
+      <div><label>Casual leave per month</label><input type="number" min="0" max="10" value="${D.cl}" onchange="setDoc('cl',this.value)"></div></div>
+  </div>
+  <div class="card"><h2>Consultants</h2>
+    ${db.consultants.map((c,i)=>`<label>Consultant ${i+1}</label><input type="text" value="${esc(c.name)}" onchange="setCons(${i},'name',this.value)">
+      <label>Days</label><div class="daychips">${[1,2,3,4,5,6,0].map(w=>`<button class="${c.days.includes(w)?'on':''}" onclick="toggleConsDay(${i},${w})" aria-pressed="${c.days.includes(w)}">${WD[w]}</button>`).join('')}</div>
+      <div class="pair"><div><label>From</label><input type="time" value="${toHHMM(+c.start)}" onchange="setConsTime(${i},'start',this.value)"></div>
+      <div><label>To</label><input type="time" value="${toHHMM(+c.end)}" onchange="setConsTime(${i},'end',this.value)"></div></div>`).join('<hr class="sep">')}
+  </div>
+  <div class="card"><h2>Assistants</h2>
     ${[0,1,2].map(i=>`<label>Assistant ${i+1}</label><input type="text" value="${esc(s.names[i]||'')}" onchange="setName(${i},this.value)">`).join('')}
+    <label>Off days per assistant per month</label><input type="number" min="0" max="15" value="${s.offs}" onchange="setSetting('offs',Math.max(0,Math.min(15,+this.value||0)))">
   </div>
   <div class="card"><h2>Clinic</h2>
     <label>Clinic name</label><input type="text" value="${esc(s.clinic||'')}" onchange="setSetting('clinic',this.value)">
-    <label>Off days per assistant per month</label><input type="number" min="0" max="15" value="${s.offs}" onchange="setSetting('offs',Math.max(0,Math.min(15,+this.value||0)))">
     <label>Start month (Sunday balance counts from here)</label><input type="month" value="${esc(s.startMonth)}" onchange="setSetting('startMonth',this.value)">
   </div>
   <div class="card"><h2>Backup</h2>
@@ -518,77 +730,87 @@ function renderSettings(){
     <input type="file" id="imp" accept="application/json,.json" style="display:none" onchange="importData(this)">
   </div>
   <div class="card"><h2>How the rota works</h2><p class="small">
-    1. Normal day: 2 Split + 1 Second.<br>
-    2. Busy day (⚡): 1 Split + 1 Second + 1 Long morning.<br>
-    3. Off day: 1 Split + 1 Second.<br>
-    4. Only 1 assistant is off each day. Every Sunday, 1 assistant is off.<br>
-    5. Past days never change.<br>
-    6. Before you share, a change rebalances the month. After you share, a change moves only the later days.</p></div>
-  <button class="btn" onclick="setTab('today')">← Back</button>`;
+    <b>Assistants.</b> A normal day has 2 Split and 1 Second. A busy day (⚡) has 1 Split, 1 Second and 1 Long morning. Only 1 assistant is off each day. Every Sunday, 1 assistant is off.<br><br>
+    <b>Doctors.</b> Each doctor keeps a fixed shift. On a leave day, the other 2 doctors work Split and Second. On Sunday, the Morning doctor has no duty, and 1 of the other 2 doctors works. Casual leave is only added when you mark it.<br><br>
+    <b>Changes.</b> Past days never change. Before you share, a change rebalances the month. After you share, a change moves only the later days.</p></div>
+  <button class="btn" onclick="setTab('today')">Back to Today</button>`;
 }
 
 /* ---------- Actions ---------- */
 function setName(i,v){db.settings.names[i]=v.trim()||`Assistant ${i+1}`;save();render();}
+function setDocName(i,v){db.doctors.names[i]=v.trim()||`Doctor ${i+1}`;save();render();}
+function setDocDefault(i,v){db.doctors.defaults[i]=v;save();render();toast('Fixed shift saved.');}
+function setDoc(k,v){db.doctors[k]=Math.max(0,Math.min(15,+v||0));save();render();}
+function setCons(i,k,v){db.consultants[i][k]=v.trim()||`Consultant ${i+1}`;save();render();}
+function toggleConsDay(i,w){const d=db.consultants[i].days;const k=d.indexOf(w);if(k>=0)d.splice(k,1);else d.push(w);save();keepScroll(render);}
+function setConsTime(i,k,v){const [h,m]=v.split(':').map(Number);if(isNaN(h))return;db.consultants[i][k]=h*60+(m||0);save();keepScroll(render);}
 function setSetting(k,v){if(k==='startMonth'&&!/^\d{4}-\d{2}$/.test(v))return;db.settings[k]=v;save();render();}
 
 function toggleBusy(date){
-  const msg=beforeEdit(date);
+  const msg=beforeEdit('asst',date);
   const [y,m]=parseIso(date), md=monthData(y,m,true);
   if(md.busy[date]) delete md.busy[date]; else md.busy[date]=true;
   save(); keepScroll(render); toast(msg);
 }
 
-function openPick(date,i){
-  const d=dayInfo(date), [y,m,dd]=parseIso(date);
-  document.getElementById('sheetTitle').innerHTML=`${badge(i,28).replace('class="badge"','class="badge" style="display:inline-flex;vertical-align:middle;margin-right:8px"')}${esc(nameOf(i))} · ${WD[d.dow]} ${dd} ${MN[m-1].slice(0,3)}`;
+function openPick(team,date,i){
+  const d=dayInfo(team,date), [y,m,dd]=parseIso(date);
+  document.getElementById('sheetTitle').innerHTML=`${badge(team,i,30)}<span>${esc(nameOf(team,i))}, ${WD[d.dow]} ${dd} ${MN[m-1].slice(0,3)}</span>`;
   const curOv=d.cells[i]||'';
-  const opts=[['','Auto','Let the site decide'],['S',SH.S.label,SH.S.time],['SE',SH.SE.label,SH.SE.time],['L',SH.L.label,SH.L.time],['O','Off','Day off']];
+  const opts=team==='doc'
+    ?[['','Automatic','Use the fixed shift'],['DS',SH.DS.label,SH.DS.time],['DE',SH.DE.label,SH.DE.time],['DM',SH.DM.label,SH.DM.time],['O','Leave','Counts in the leave days'],['CL','Casual leave',`${computeMonth(team,y,m).stats[i].cl} of ${+db.doctors.cl||2} used`]]
+    :[['','Automatic','Let the site decide'],['S',SH.S.label,SH.S.time],['SE',SH.SE.label,SH.SE.time],['L',SH.L.label,SH.L.time],['O','Off','Day off']];
   let h=`<div class="sub">Set a shift</div>`+opts.map(([k,l,t])=>
-    `<button class="opt ${curOv===k?'sel':''}" onclick="pick('${date}',${i},'${k}')">${l}<span>${t}</span></button>`).join('');
+    `<button class="opt ${curOv===k?'sel':''}" onclick="pick('${team}','${date}',${i},'${k}')">${l}<span>${t}</span></button>`).join('');
   h+=`<div class="sub">Or swap with</div>`+[0,1,2].filter(k=>k!==i).map(k=>
-    `<button class="opt" onclick="swapCells('${date}',${i},${k})">⇄ ${esc(nameOf(k))}<span>${SH[d.shifts[i]].label} ↔ ${SH[d.shifts[k]].label}</span></button>`).join('');
+    `<button class="opt" onclick="swapCells('${team}','${date}',${i},${k})">⇄ ${esc(nameOf(team,k))}<span>${shLabel(team,d.shifts[i])} and ${shLabel(team,d.shifts[k])}</span></button>`).join('');
   document.getElementById('sheetOpts').innerHTML=h;
   document.getElementById('sheet').classList.add('show');
 }
 function closeSheet(){document.getElementById('sheet').classList.remove('show');}
-function pick(date,i,k){
-  const msg=beforeEdit(date);
-  const [y,m]=parseIso(date), md=monthData(y,m,true);
-  const c=md.cells[date]||{};
-  if(k==='O'){ const other=[0,1,2].find(x=>x!==i&&c[x]==='O'); if(other!==undefined){ closeSheet(); return toast(`${nameOf(other)} is already off on this day.`); } }
+function pick(team,date,i,k){
+  const [y,m]=parseIso(date), td=teamData(team,y,m,true);
+  const c=td.cells[date]||{};
+  if(k==='O'||k==='CL'){
+    const other=[0,1,2].find(x=>x!==i&&(c[x]==='O'||c[x]==='CL'));
+    if(other!==undefined){ closeSheet(); return toast(`${nameOf(team,other)} is already off on this day.`); }
+    if(k==='CL'&&c[i]!=='CL'&&computeMonth(team,y,m).stats[i].cl>=(+db.doctors.cl||2)){ closeSheet(); return toast(`${nameOf(team,i)} already used all casual leave this month.`); }
+  }
+  const msg=beforeEdit(team,date);
   if(k) c[i]=k; else delete c[i];
-  if(Object.keys(c).length) md.cells[date]=c; else delete md.cells[date];
+  if(Object.keys(c).length) td.cells[date]=c; else delete td.cells[date];
   save(); closeSheet(); keepScroll(render); toast(msg);
 }
-function swapCells(date,i,k){
-  const d=dayInfo(date);
-  const msg=beforeEdit(date);
-  const [y,m]=parseIso(date), md=monthData(y,m,true);
-  const c=md.cells[date]||{};
+function swapCells(team,date,i,k){
+  const d=dayInfo(team,date);
+  const msg=beforeEdit(team,date);
+  const [y,m]=parseIso(date), td=teamData(team,y,m,true);
+  const c=td.cells[date]||{};
   c[i]=d.shifts[k]; c[k]=d.shifts[i];
-  md.cells[date]=c;
-  save(); closeSheet(); keepScroll(render); toast(`${nameOf(i)} and ${nameOf(k)} swapped. `+msg.replace('Saved. ',''));
+  td.cells[date]=c;
+  save(); closeSheet(); keepScroll(render); toast(`${nameOf(team,i)} and ${nameOf(team,k)} swapped. `+msg.replace('Saved. ',''));
 }
 function keepScroll(fn){const y=window.scrollY;fn();window.scrollTo(0,y);}
 
 function recalcFuture(){
-  const T=todayIso(), md=monthData(view.y,view.m,true);
-  Object.keys(md.snap).forEach(k=>{ if(k>=T) delete md.snap[k]; });
-  md.shared=null; save(); render(); toast('The site recalculated the days from today.');
+  const T=todayIso(), td=teamData(view.team,view.y,view.m,true);
+  Object.keys(td.snap).forEach(k=>{ if(k>=T) delete td.snap[k]; });
+  td.shared=null; save(); render(); toast('The site recalculated the days from today.');
 }
 function resetMonth(){
-  if(!confirm(`Clear your changes for ${MN[view.m-1]} ${view.y} from today on?`)) return;
-  const T=todayIso(), md=monthData(view.y,view.m,true);
-  ['cells','busy','snap'].forEach(f=>Object.keys(md[f]).forEach(k=>{ if(k>=T) delete md[f][k]; }));
-  md.shared=null; save(); render(); toast('The month is reset from today.');
+  if(!confirm(`Clear your changes for the ${TEAM[view.team].label.toLowerCase()} in ${MN[view.m-1]} ${view.y} from today on?`)) return;
+  const T=todayIso(), md=monthData(view.y,view.m,true), td=teamData(view.team,view.y,view.m,true);
+  const fields=view.team==='asst'?[[md,'cells'],[md,'busy'],[md,'snap']]:[[td,'cells'],[td,'snap']];
+  fields.forEach(([o,f])=>Object.keys(o[f]).forEach(k=>{ if(k>=T) delete o[f][k]; }));
+  td.shared=null; save(); render(); toast('The month is reset from today.');
 }
 
 function exportData(){
   db.settings.lastBackup=Date.now(); save();
   const blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'});
-  const a=document.createElement('a'), t=new Date();
+  const a=document.createElement('a');
   a.href=URL.createObjectURL(blob);
-  a.download=`clinic-rota-backup-${isoOf(t)}.json`;
+  a.download=`clinic-rota-backup-${todayIso()}.json`;
   document.body.appendChild(a); a.click(); a.remove();
   setTimeout(()=>URL.revokeObjectURL(a.href),2000);
   render();
@@ -601,7 +823,7 @@ function importData(inp){
       const d=JSON.parse(r.result);
       if(!d.settings||!d.months) throw new Error('bad');
       if(!confirm('Replace the current data with this backup?')) return;
-      db=d; save(); render(); alert('The backup is restored.');
+      db=d; migrate(); save(); render(); alert('The backup is restored.');
     }catch(e){alert('This file is not a valid rota backup.');}
     inp.value='';
   };
@@ -611,49 +833,60 @@ function importData(inp){
 /* ---------- Sharing ---------- */
 function shareNow(){ if(view.tab==='today'){ const b=new Date(); b.setDate(b.getDate()+view.dayOffset); shareDay(isoOf(b)); } else shareImage(); }
 
+function dayText(date){
+  const dd=dayInfo('doc',date), da=dayInfo('asst',date), [y,m,d]=parseIso(date), all=db.settings.todayAll;
+  const L=[`*Duty for ${WD[dd.dow]} ${d} ${MN[m-1].slice(0,3)}*`,'','*Doctors*'];
+  [0,1,2].forEach(i=>{ const c=dd.shifts[i]; L.push(SH[c].iv.length?`${nameOf('doc',i)}: ${shLabel('doc',c)} (${SH[c].time})`:`${nameOf('doc',i)}: ${shLabel('doc',c)}`); });
+  L.push('','*Assistants*');
+  [0,1,2].forEach(i=>{ const c=da.shifts[i]; L.push(c==='O'?`${nameOf('asst',i)}: Off`:`${nameOf('asst',i)}: ${SH[c].label} (${SH[c].time})`); });
+  if(da.busy) L.push('⚡ Busy day');
+  if(all){ const cons=consFor(date); if(cons.length){ L.push('','*Consultants*'); cons.forEach(c=>L.push(`${c.name}: ${c.absent?'Not coming':c.time}`)); } }
+  return L.join('\n');
+}
 async function shareDay(date){
-  const d=dayInfo(date), [y,m,dd]=parseIso(date);
-  const lines=[`*Duty — ${WD[d.dow]} ${dd} ${MN[m-1].slice(0,3)}*`];
-  [0,1,2].forEach(i=>{ const s=SH[d.shifts[i]]; lines.push(d.shifts[i]==='O'?`${nameOf(i)}: Off`:`${nameOf(i)}: ${s.label} (${s.time})`); });
-  if(d.busy) lines.push('⚡ Busy day');
-  const text=lines.join('\n');
+  const text=dayText(date);
   if(navigator.share){ try{ await navigator.share({text}); return; }catch(e){ if(e&&e.name==='AbortError') return; } }
   window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank');
 }
 
 function shareImage(){
-  const r=cur, n=r.days.length, W=1000, rowH=38, top=150, colW=(W-160)/3;
-  const H=top+rowH*n+120;
+  const r=cur, team=r.team, n=r.days.length, W=1000, rowH=38, top=150, colW=(W-160)/3;
+  const consNote=team==='doc'?db.consultants.map(c=>`${c.name}: ${c.days.slice().sort((a,b)=>((a+6)%7)-((b+6)%7)).map(w=>WD[w]).join(', ')} ${fmtRange(+c.start,+c.end)}`):[];
+  const H=top+rowH*n+120+consNote.length*30;
   const c=document.createElement('canvas'); c.width=W; c.height=H;
-  const g=c.getContext('2d');
+  const g=c.getContext('2d'), F='"Atkinson Hyperlegible",system-ui,sans-serif';
   g.fillStyle='#ffffff'; g.fillRect(0,0,W,H);
-  g.fillStyle='#0f766e'; g.fillRect(0,0,W,96);
-  g.fillStyle='#fff'; g.font='bold 34px system-ui,sans-serif'; g.fillText(`${db.settings.clinic||'Clinic'} — Duty Rota`,30,48);
-  g.font='22px system-ui,sans-serif'; g.fillText(`${MN[r.m-1]} ${r.y}`,30,82);
-  g.font='bold 20px system-ui,sans-serif';
+  g.fillStyle='#0b4f4a'; g.fillRect(0,0,W,96);
+  g.fillStyle='#fff'; g.font=`bold 34px ${F}`; g.fillText(`${db.settings.clinic||'Clinic'}: ${TEAM[team].label} rota`,30,48);
+  g.font=`22px ${F}`; g.fillText(`${MN[r.m-1]} ${r.y}`,30,82);
+  g.font=`bold 20px ${F}`;
   g.fillStyle='#374151'; g.fillText('Date',30,top-18);
-  [0,1,2].forEach(i=>{ g.fillStyle=AC[i]; g.textAlign='center'; g.fillText(nameOf(i).slice(0,18),160+colW*i+colW/2,top-18); g.textAlign='left'; });
+  [0,1,2].forEach(i=>{ g.fillStyle=COL[team][i]; g.textAlign='center'; g.fillText(nameOf(team,i).slice(0,20),160+colW*i+colW/2,top-18); g.textAlign='left'; });
   r.days.forEach((d,k)=>{
     const y=top+k*rowH;
-    if(d.dow===0){ g.fillStyle='#f0fdfa'; g.fillRect(0,y,W,rowH); }
-    g.fillStyle='#111827'; g.font='bold 18px system-ui,sans-serif';
+    if(d.dow===0){ g.fillStyle='#f2f8f6'; g.fillRect(0,y,W,rowH); }
+    g.fillStyle='#15302b'; g.font=`bold 18px ${F}`;
     g.fillText(`${pad(d.day)} ${WD[d.dow]}${d.busy?' ⚡':''}`,30,y+25);
     d.shifts.forEach((s,i)=>{
       const x=160+colW*i+6, sh=SH[s];
       g.fillStyle=sh.bg; roundRect(g,x,y+4,colW-12,rowH-8,8); g.fill();
-      g.fillStyle=sh.fg; g.font='bold 17px system-ui,sans-serif'; g.textAlign='center';
-      g.fillText(s==='O'?'OFF':`${sh.label} (${sh.time})`,x+(colW-12)/2,y+25); g.textAlign='left';
+      g.fillStyle=sh.fg; g.font=`bold 17px ${F}`; g.textAlign='center';
+      g.fillText(sh.iv.length?`${sh.label} (${sh.time})`:shLabel(team,s).toUpperCase(),x+(colW-12)/2,y+25); g.textAlign='left';
     });
-    g.strokeStyle='#e5e7eb'; g.beginPath(); g.moveTo(20,y+rowH); g.lineTo(W-20,y+rowH); g.stroke();
+    g.strokeStyle='#d8e2de'; g.beginPath(); g.moveTo(20,y+rowH); g.lineTo(W-20,y+rowH); g.stroke();
   });
-  g.fillStyle='#6b7280'; g.font='17px system-ui,sans-serif';
-  g.fillText('Split: 8 AM–1 PM & 4–8:30 PM   •   Second: 12–8:30 PM   •   Long morning: 8 AM–5 PM',30,top+rowH*n+45);
-  g.fillText('⚡ = busy day (extra cover 1–4 PM)',30,top+rowH*n+75);
-  const markShared=()=>{ const md=monthData(r.y,r.m,true); if(!md.shared){ md.shared=Date.now(); save(); render(); toast('Marked as shared. Later changes move only the days after them.'); } };
+  g.fillStyle='#5f726d'; g.font=`17px ${F}`;
+  const legend=team==='doc'
+    ?'Split: 9 AM–1 PM and 4–8:30 PM   Second: 12:30–8:30 PM   Morning: 10 AM–1 PM'
+    :'Split: 8 AM–1 PM and 4–8:30 PM   Second: 12–8:30 PM   Long morning: 8 AM–5 PM';
+  g.fillText(legend,30,top+rowH*n+45);
+  g.fillText(team==='doc'?'CL = casual leave':'⚡ = busy day (extra cover 1–4 PM)',30,top+rowH*n+75);
+  consNote.forEach((t,k)=>g.fillText(t,30,top+rowH*n+105+k*30));
+  const markShared=()=>{ const td=teamData(team,r.y,r.m,true); if(!td.shared){ td.shared=Date.now(); save(); render(); toast('Marked as shared. Later changes move only the days after them.'); } };
   c.toBlob(async b=>{
-    const file=new File([b],`rota-${ymKey(r.y,r.m)}.png`,{type:'image/png'});
+    const file=new File([b],`${team==='doc'?'doctor':'assistant'}-rota-${ymKey(r.y,r.m)}.png`,{type:'image/png'});
     if(navigator.canShare&&navigator.canShare({files:[file]})){
-      try{ await navigator.share({files:[file],title:`Duty rota ${MN[r.m-1]} ${r.y}`}); markShared(); }catch(e){}
+      try{ await navigator.share({files:[file],title:`${TEAM[team].label} rota ${MN[r.m-1]} ${r.y}`}); markShared(); }catch(e){}
     }else{
       const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download=file.name;
       document.body.appendChild(a); a.click(); a.remove(); markShared();
