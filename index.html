@@ -169,8 +169,7 @@ input[type=text],input[type=number],input[type=month],input[type=time],select{wi
 .segt{position:absolute;top:0;bottom:0;display:flex;align-items:center;font-size:11px;font-weight:700;white-space:nowrap;padding-left:8px;pointer-events:none}
 .offt{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600}
 .trk .line6{position:absolute;top:-2px;bottom:-2px;border-left:2px dashed #F0A79D}
-.trk .now{position:absolute;top:-3px;bottom:-3px;border-left:2px solid var(--flame)}
-.ticks{margin-left:46px}
+.ticks{margin-left:46px;margin-top:0;margin-bottom:4px}
 .cnts{font-size:12px;color:var(--mute);margin-top:8px;line-height:1.6}
 .cnts b{color:var(--ink)}
 .none{font-size:12px;color:var(--mute);padding:4px 0}
@@ -629,8 +628,7 @@ function renderToday(){
 }
 function dayChart(date,dd,da,cons,showNow,show,tv){
   const A=480,B=1230,pc=t=>((t-A)/(B-A)*100).toFixed(2)+'%';
-  const nowMin=new Date().getHours()*60+new Date().getMinutes();
-  const lines=`<div class="line6" style="left:${pc(1080)}"></div>${showNow&&nowMin>=A&&nowMin<=B?`<div class="now" style="left:${pc(nowMin)}"></div>`:''}`;
+  const lines=`<div class="line6" style="left:${pc(1080)}"></div>`;
   const track=(segs,offText,offCol)=>{
     if(!segs.length) return `<div class="trk offtrk"><span class="offt" style="color:${offCol}">${esc(offText)}</span>${lines}</div>`;
     return `<div class="trk">${segs.map(g=>`<div class="seg" style="left:${pc(g.a)};width:calc(${pc(g.b)} - ${pc(g.a)});background:${g.bg}"></div><span class="segt" style="left:${pc(g.a)};color:${g.fg}">${esc(g.t)}</span>`).join('')}${lines}</div>`;
@@ -647,6 +645,8 @@ function dayChart(date,dd,da,cons,showNow,show,tv){
       ${track(shiftSegs(team,c),shLabel(team,c),SH[c].fg)}</button>`;
   };
   let h=`<div class="chart" aria-label="Who is in the clinic">`;
+  h+=`<div class="ticks">${[[480,'8 AM'],[720,'12'],[960,'4 PM'],[1080,'6'],[1230,'8:30']].map(([t,l])=>`<span class="tick" style="left:${pc(t)}">${l}</span>`).join('')}</div>`;
+
   if(show('doc')) h+=`<div class="ghd">Doctors</div>`+[0,1,2].map(i=>person('doc',dd,i)).join('');
   if(show('asst')) h+=`<div class="ghd">Assistants<button class="busychip ${da.busy?'on':''}" onclick="toggleBusy('${date}')">⚡ Busy 1–4 PM: ${da.busy?'Yes':'No'}</button></div>`+[0,1,2].map(i=>person('asst',da,i)).join('');
   if(show('cons')){
@@ -655,7 +655,6 @@ function dayChart(date,dd,da,cons,showNow,show,tv){
       ${c.absent?track([],'Not coming','#A8968A'):track([{a:c.start,b:c.end,bg:'#E3E1EC',fg:'#272D4E',t:c.time}])}</button>`).join('');
     else if(tv==='cons') h+=`<div class="ghd">Consultants</div><div class="none">No consultant comes on this day.</div>`;
   }
-  h+=`<div class="ticks">${[[480,'8 AM'],[720,'12'],[960,'4 PM'],[1080,'6'],[1230,'8:30']].map(([t,l])=>`<span class="tick" style="left:${pc(t)}">${l}</span>`).join('')}</div>`;
   const at=(shifts,t)=>shifts.filter(s=>SH[s].iv.some(([a,b])=>t>=a&&t<b)).length;
   const pl=(n,w)=>`<b>${n}</b> ${w}${n===1?'':'s'}`;
   const cnt=t=>[show('doc')?pl(at(dd.shifts,t),'doctor'):'',show('asst')?pl(at(da.shifts,t),'assistant'):'',
